@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Register a Instructor</h1>
+    <div class="form">
+      <form>
+        <div class="firstrow">
+          <label for="fname">Fname</label>
+          <label for="lname">Lname</label>
+          <div class="name">
+            <input type="text" id="fname" placeholder="Firstname" name="fname">
+            <input type="text"id="lname" placeholder="Lastname" name="lname">
+          </div>
+        </div>
+        <div class="secrow">
+          <div class="age">
+            <label for="age">Age</label>
+            <div class="ageinp"><input type="number" id="age" placeholder="age" name="age"></div>
+          </div>
+          <div class="phone">
+            <label for="phone">Phone</label>
+            <div class="phoneinp"><input type="phone" id="phone" placeholder="phone" name="phone"></div>
+          </div>
+        </div>
+        <div class="thirdrow">
+          <p>Gender</p>
+          <input type="radio" name="gen" id="gen_a" value="M" checked>
+      <label for="gen_a">Men</label>
+      <input type="radio" name="gen" id="gen_b" value="W">
+      <label for="gen_b">Women</label>
+      <input type="radio" name="gen" id="gen_o" value="O">
+      <label for="gen_o">Other</label>
+      </div>
+      <div class="fourthrow">
+        <label for="email">email</label>
+        <div class="emailinp"><input type="email" id="email" placeholder="email" name="email"></div>
+      </div>
+      <div class="fifthrow">
+        <label for="password">password</label>
+        <div class="passwordinp"><input type="password" id="password" placeholder="password" name="pass"></div>
+      </div>
+      <button type="submit">Register</button>
+      </form>
+    </div>
+
+
+      </div>
+    
+  
+</body>
+<script type="module">
+  import XMLReq from "./js/XMLReq.js"
+  let xmlReq = new XMLReq("http://localhost/finalproject/FitnessCMS-FinalProject/member.php");
+  document.querySelector("form").addEventListener("submit",(e)=>{
+      e.preventDefault();
+      let reqData = new FormData(e.target);
+      reqData.append("req","ilogin");
+      xmlReq.Post(reqData).then(
+         (data)=>console.log(data),
+         (rej)=>console.log(rej)
+      )
+   })
+</script>
+</html>
