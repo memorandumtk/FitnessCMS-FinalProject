@@ -31,11 +31,23 @@ margin-right: 10px;
   display: flex;
   justify-content: space-between;
 }
+td{
+  background-color: white;
+  color: black;
+  padding: 20px;
+}
+td button{
+  background-color: #A10B0A;
+  border-radius: 10px;
+  color: white;
+  padding: 10px;
+}
 .list-table{
   width: 49%;
   background-color: #EAEAEA;
   padding: 20px 30px;
   border-radius: 10px;
+  overflow: scroll;
 }
 .list-table h2{
   text-align: left;

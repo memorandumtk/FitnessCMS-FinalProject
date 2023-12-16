@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
   <div class="container">
     <div class="title">
@@ -27,7 +29,7 @@
             </tr>
           </thead>
           <tbody>
-      
+
           </tbody>
         </table>
       </div>
@@ -49,6 +51,93 @@
       </div>
     </div>
   </div>
-  
+
 </body>
+<script type="module">
+  import XMLReq from "../js/XMLReq.js";
+  let xmlReq = new XMLReq("http://localhost/finalproject/FitnessCMS-FinalProject/member.php");
+  const mdeleteHandler =(pr)=>{
+ console.log(pr);
+ let mdelete =pr
+ let reqData = new FormData();
+    reqData.append("req", "mdel");
+    reqData.append("mdel",JSON.stringify(mdelete));
+    xmlReq.Post(reqData).then(
+      (data)=>console.log(data),
+      (rej) => console.log(rej)
+    )
+    location.reload(true)
+  }
+  const ideleteHandler =(pr)=>{
+ console.log(pr);
+ let idelete =pr
+ let reqData = new FormData();
+    reqData.append("req", "idel");
+    reqData.append("idel",JSON.stringify(idelete));
+    xmlReq.Post(reqData).then(
+      (data)=>console.log(data),
+      (rej) => console.log(rej)
+    )
+    location.reload(true)
+  }
+  const table =(data)=>{
+    let newArr =JSON.parse(data)
+    let member = newArr[0];
+    let instructor = newArr[1];
+    let mtable = document.querySelectorAll("tbody")[0];
+    for(let pr of member){
+      let tr = document.createElement("tr")
+      for(let key in pr){
+        const td = document.createElement("td");
+        td.innerText=pr[key];
+        tr.append(td)
+
+      }
+      let btntd = document.createElement("td")
+      let btn =document.createElement("button")
+            btn.innerText="Delete";
+            btn.addEventListener("click",function(e){
+              mdeleteHandler(pr)
+              // console.log(pr);
+            })
+            btntd.append(btn);
+            tr.append(btntd)
+
+      mtable.append(tr)
+    }
+    let itable = document.querySelectorAll("tbody")[1];
+    for(let pr of instructor){
+      let tr = document.createElement("tr")
+      for(let key in pr){
+        const td = document.createElement("td");
+        td.innerText=pr[key];
+        tr.append(td)
+
+      }
+      let btntd = document.createElement("td")
+      let btn =document.createElement("button")
+            btn.innerText="Delete";
+            btntd.append(btn);
+            btn.addEventListener("click",function(e){
+              ideleteHandler(pr);
+            })
+            tr.append(btntd)
+
+      itable.append(tr)
+    }
+
+
+  }
+  function load (){
+    let reqData = new FormData();
+    reqData.append("req", "read");
+    xmlReq.Post(reqData).then(
+      table,
+      (rej) => console.log(rej)
+    )
+
+  }
+  load();
+</script>
+
 </html>

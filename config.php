@@ -1,6 +1,6 @@
 <?php
 $dbServer = 'localhost';
-$dbUser = 'orca';
+$dbUser = 'phpagent';
 $dbPass = 'orca';
 $dbName = 'orca_fitness';
 

@@ -45,6 +45,66 @@ $stmt->close();
 $conn->close();
 }
 break;
+case"read":
+  $conn =new mysqli("localhost","tsubasa","tsubasa1213","orca_fitness");
+if($conn->connect_error){
+  die("Connection Failed :" .$conn->connect_error);
+}else{
+  $mQuery="SELECT fname,lname,gender,email FROM member_tb";
+  $iQuery="SELECT fname,lname,gender,email FROM instructor_tb";
+  $mdata= $conn->query($mQuery);
+  $idata= $conn->query($iQuery);
+  $mData= [];
+  $iData= [];
+  if($mdata->num_rows>0){
+    while($row = $mdata->fetch_assoc()){
+      array_push($mData,$row);
+    }
+  }
+  if($idata->num_rows>0){
+    while($row = $idata->fetch_assoc()){
+      array_push($iData,$row);
+    }
+  }
+  $arr =array($mData,$iData);
+  echo json_encode($arr);
+
+}
+break;
+case"mdel":
+  $mdel= json_decode($_POST['mdel']); 
+  $memail=$mdel->email;
+  $conn =new mysqli("localhost","tsubasa","tsubasa1213","orca_fitness");
+  echo($memail);
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+$targetEmail = $memail;
+$sql = "DELETE FROM member_tb WHERE email = '$targetEmail'";
+if ($conn->query($sql) === TRUE) {
+    echo "User data with email $targetEmail deleted successfully";
+} else {
+    echo "Error deleting record: " . $conn->error;
+}
+$conn->close();
+break;
+case"idel":
+  $idel= json_decode($_POST['idel']); 
+  $iemail=$idel->email;
+  $conn =new mysqli("localhost","tsubasa","tsubasa1213","orca_fitness");
+  echo($iemail);
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+$targetEmail = $iemail;
+$sql = "DELETE FROM instructor_tb WHERE email = '$targetEmail'";
+if ($conn->query($sql) === TRUE) {
+    echo "User data with email $targetEmail deleted successfully";
+} else {
+    echo "Error deleting record: " . $conn->error;
+}
+$conn->close();
+break;
 } 
 }
 
