@@ -142,7 +142,7 @@
             requestForm.classList.add("active");
         }
         const workoutHandler = (workout) => {
-            if (workout == null) {
+            if (!workout) {
                 workoutDiv.textContent = "haven't create program";
                 let requestBtn = document.createElement("button");
                 requestBtn.type = "button";
