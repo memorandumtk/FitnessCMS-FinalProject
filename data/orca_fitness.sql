@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2023 at 02:18 AM
+-- Generation Time: Dec 16, 2023 at 03:51 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -98,6 +98,16 @@ CREATE TABLE `workout_tb` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `workout_tb`
+--
+
+INSERT INTO `workout_tb` (`wid`, `wname`, `target`, `difficulty`, `sets`, `reps`, `type`) VALUES
+(1, 'Dumbel rows', 'Back', 'Beginner', 2, 10, 'Free weight'),
+(2, 'Chest fly', 'Chest', 'Intermidiate', 2, 12, 'Cable'),
+(3, 'Shoulder press', 'Shoulders', 'Advanced', 3, 8, 'Arms'),
+(4, 'Rope Pulldown', 'Triceps', 'Beginner', 2, 10, 'Arms');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -139,7 +149,7 @@ ALTER TABLE `member_tb`
 -- AUTO_INCREMENT for table `workout_tb`
 --
 ALTER TABLE `workout_tb`
-  MODIFY `wid` mediumint(9) NOT NULL AUTO_INCREMENT COMMENT 'ID of workout';
+  MODIFY `wid` mediumint(9) NOT NULL AUTO_INCREMENT COMMENT 'ID of workout', AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
