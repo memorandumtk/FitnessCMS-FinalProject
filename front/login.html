@@ -44,6 +44,7 @@
 
 
     <script>
+        let isMember = true;
         const phppath = "http://localhost/php/FitnessCMS-FinalProject/login.php";
         // Using fetch
         async function postRequest(reqData) {
@@ -54,9 +55,15 @@
                 });
                 const result = await response.json();
                 console.log("Success:", result.result);
-                sessionStorage.setItem("sid", result.result.sid);
-                sessionStorage.setItem("fname", result.result.fname);
-                location.replace("./member.html");
+                if (isMember) {
+                    sessionStorage.setItem("sid", result.result.sid);
+                    sessionStorage.setItem("mid", result.result.mid);
+                    location.replace("./member.html")
+                } else {
+                    sessionStorage.setItem("sid", result.result.sid);
+                    sessionStorage.setItem("iid", result.result.iid);
+                    location.replace("./instructor.html");
+                }
             } catch (error) {
                 console.log("Error:", error);
             }
@@ -68,6 +75,7 @@
             const fname = document.querySelectorAll("input")[0].value;
             const password = document.querySelectorAll("input")[1].value;
             const kind = document.querySelectorAll("input")[2].checked ? "on" : "off";
+            isMember = kind == "on" ? true : false;
             reqData.append("fname", fname);
             reqData.append("password", password);
             reqData.append("kind", kind);

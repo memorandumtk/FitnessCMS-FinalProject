@@ -12,6 +12,15 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <title>Orca_Member</title>
+    <style>
+        .active {
+            display: block;
+        }
+
+        .nonactive {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -32,14 +41,169 @@
         </div>
 
         <div>
-            Program for memeber comes here...
+            <div class="workout">
+                Program for memeber comes here...
+            </div>
+            <div>
+                <form class="workout-form nonactive">
+                    <fieldset>
+                        <legend>1. Which difficulty level would you like to choose?</legend>
+                        <div>
+                            <input type="radio" id="beginner" name="level" value="beginner" checked />
+                            <label for="beginner">Beginner</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="intermidiate" name="level" value="intermidiate" />
+                            <label for="intermidiate">Intermidiate</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="advanced" name="level" value="advanced" />
+                            <label for="advanced">Advanced</label>
+                        </div>
+                    </fieldset>
+
+                    <label for="days">2. How many days a week would you like to workout?</label>
+                    <select name="days" id="days">
+                        <option value="">--Please choose an option--</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                    </select>
+
+                    <label for="instructors">3. Which instructors would you like to work with?</label>
+                    <select name="instructors" id="instructors">
+                        <option value="">--Please choose an option--</option>
+                        <option value="example">example</option>
+                    </select>
+
+                    <fieldset>
+                        <legend>4. What is your goal with this program?</legend>
+                        <div>
+                            <input type="radio" id="burn fat" name="goal" value="burn fat" checked />
+                            <label for="burn fat">Burn Fat</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="build muscle" name="goal" value="build muscle" />
+                            <label for="build muscle">Build Muscle</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="gain strength" name="goal" value="gain strength" />
+                            <label for="gain strength">Gain Strength</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="stay active" name="goal" value="stay active" />
+                            <label for="stay active">Stay Active</label>
+                        </div>
+                    </fieldset>
+
+                    <label for="note">Tell us your note:</label>
+                    <textarea id="note" name="note"></textarea>
+                    <button type="submit">Send</button>
+                </form>
+            </div>
         </div>
     </main>
 
 
-    <script>
 
+    <script type="module">
+        import XMLReq from "./js/XMLReq.js"
+        const memberPhp = "http://localhost/php/FitnessCMS-FinalProject/members.php";
+        let xmlReq = new XMLReq(memberPhp);
+
+        let workout;
+        let workoutDiv = document.querySelector(".workout");
+        let requestForm = document.querySelector(".workout-form");
+        requestForm.addEventListener("submit", (e)=>{
+            e.preventDefault();
+            const sid = sessionStorage.getItem("sid");
+            const mid = sessionStorage.getItem("mid");
+            let reqData = new FormData(e.target);
+            reqData.append("sid", sid);
+            reqData.append("mid", mid);
+            reqData.append("mode", "display")
+            xmlReq.Post(reqData).then(
+                (data) => {
+                    console.log(data);
+                },
+                (rej) => {
+                    console.log(rej);
+                }
+            )
+
+        })
+        const workoutRequestPopper = (e) => {
+            e.preventDefault();
+            requestForm.classList.remove("nonactive");
+            requestForm.classList.add("active");
+        }
+        const workoutHandler = (workout) => {
+            if (workout == null) {
+                workoutDiv.textContent = "haven't create program";
+                let requestBtn = document.createElement("button");
+                requestBtn.type = "button";
+                requestBtn.textContent = "Request Wrokout";
+                requestBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    workoutRequestPopper(e);
+                })
+                workoutDiv.append(requestBtn);
+            } else {
+                workoutDiv.textContent = "create program!";
+            }
+        }
+
+        const load = () => {
+            const sid = sessionStorage.getItem("sid");
+            const mid = sessionStorage.getItem("mid");
+            let reqData = new FormData();
+            reqData.append("sid", sid);
+            reqData.append("mid", mid);
+            reqData.append("mode", "load")
+            xmlReq.Post(reqData).then(
+                (data) => {
+                    console.log(data);
+                    workout = JSON.parse(data).menu;
+                    workoutHandler(workout);
+                },
+                (rej) => {
+                    console.log(rej);
+                }
+            )
+        }
+        load();
+
+
+        // let form = document.createElement("form");
+        // let beginnerP = document.createElement("p");
+        // beginnerP.textContent = "What difficulty of level of workout would you like?"
+        // let beginnerLabel = document.createElement("label");
+        // beginnerLabel.htmlFor = "beginner"
+        // beginnerLabel.textContent = "What difficulty of level of workout would you like?"
+        // let beginner = document.createElement("input");
+        // beginner.id = "beginner";
+
+        // let difOption = document.createElement("option");
+        // difOption.value =
+
+        // // input for notes
+        // let notesLabel = document.createElement("label");
+        // notesLabel.htmlFor = "notes"
+        // notesLabel.textContent = "Extra notes for your instuctor."
+        // let notesInput = document.createElement("textarea");
+        // notesInput.name = "notes";
+        // notesLabel.append(notesInput);
+
+        // // putting all together
+        // form.append(notesLabel);
+        // workoutDiv.append(form);
     </script>
 </body>
+
+
 
 </html>
