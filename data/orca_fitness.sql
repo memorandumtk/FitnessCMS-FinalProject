@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 14, 2023 at 09:46 AM
+-- Generation Time: Dec 16, 2023 at 02:18 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -77,9 +77,25 @@ CREATE TABLE `member_tb` (
 --
 
 INSERT INTO `member_tb` (`mid`, `fname`, `lname`, `email`, `pass`, `phone`, `gender`, `joined`, `menu`, `level`, `goal`, `days`, `note`, `iid`, `age`) VALUES
-(1, 'Kosuke', 'Takagi', 'kosuke@example.com', 'kosuke', '1234561234', 'male', '2023-12-14', NULL, 'intermidiate', 'burn fat', 3, NULL, NULL, 24),
+(1, 'Kosuke', 'Takagi', 'kosuke@example.com', 'kosuke', '1234561234', 'male', '2023-12-14', 1234, 'intermidiate', 'burn fat', 3, NULL, NULL, 24),
 (2, 'test1', 'some1', 'test1@example.com', 'test1', '4567897564', 'female', '2023-12-20', NULL, 'advanced', 'build muscle', 4, NULL, NULL, 56),
 (5, 'test2', 'some2', 'test2@example.com', 'test2', '1234561256', 'male', '2023-12-24', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workout_tb`
+--
+
+CREATE TABLE `workout_tb` (
+  `wid` mediumint(9) NOT NULL COMMENT 'ID of workout',
+  `wname` varchar(50) NOT NULL COMMENT 'Name of workout',
+  `target` varchar(50) NOT NULL COMMENT 'Muscle target',
+  `difficulty` varchar(50) NOT NULL COMMENT 'Option of difficulty',
+  `sets` int(11) NOT NULL COMMENT 'Number of sets',
+  `reps` int(11) NOT NULL COMMENT 'Number of reps',
+  `type` varchar(50) NOT NULL COMMENT 'Type of workout'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -98,6 +114,12 @@ ALTER TABLE `member_tb`
   ADD PRIMARY KEY (`mid`);
 
 --
+-- Indexes for table `workout_tb`
+--
+ALTER TABLE `workout_tb`
+  ADD PRIMARY KEY (`wid`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -112,6 +134,12 @@ ALTER TABLE `instructor_tb`
 --
 ALTER TABLE `member_tb`
   MODIFY `mid` mediumint(9) NOT NULL AUTO_INCREMENT COMMENT 'Member''s id', AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `workout_tb`
+--
+ALTER TABLE `workout_tb`
+  MODIFY `wid` mediumint(9) NOT NULL AUTO_INCREMENT COMMENT 'ID of workout';
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
