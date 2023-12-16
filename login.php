@@ -30,13 +30,12 @@ switch($_SERVER["REQUEST_METHOD"]) {
                     // Checkiing user information is matched.
                     if($_POST["fname"]==$row["fname"]
                     && $_POST["password"]==$row["pass"]) {
-                        $output = $row;
+                        session_start();
+                        $output = ["sid"=>session_id(),"mid"=>$row["mid"]];
+                        echo json_encode(["result"=>$output]);
                         break;
                     }
                 }
-                session_start();
-                $output = ["sid"=>session_id(),"fname"=>$row["fname"]];
-                echo json_encode(["result"=>$output]);
                 if ($output==[]) {
                     echo json_encode(["result"=>"user not found"]);
                 }
