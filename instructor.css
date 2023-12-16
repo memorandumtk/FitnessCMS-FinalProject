@@ -1,0 +1,30 @@
+.header-class {
+    height: 100px;
+    background-color: rgb(65, 65, 248);
+    display: flex;
+    align-items: center;
+}
+
+#welcome-h1{
+    color: white;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+button {
+    border-radius: 20px;
+}
+
+.title-class h1 {
+    margin-left: 100px;
+}
+
+.title-class{
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+table {
+    margin: auto;
+}
