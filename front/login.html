@@ -44,32 +44,32 @@
 
 
     <script>
-        // s: login member change event
         let loginTitle = document.querySelector('#loginTitle');
         let btnChgMember = document.querySelector('#btnChgMember');
         let kindSwitch = document.querySelector('#kindSwitch');
 
+        // s: login member change event
         btnChgMember.addEventListener('click', ()=>{
-          if(btnChgMember.getAttribute('data-status') == 'member'){
+          if(btnChgMember.getAttribute('data-status') === 'member'){
             btnChgMember.setAttribute('data-status', 'admin');
-          }else if(btnChgMember.getAttribute('data-status') == 'admin'){
+          }else if(btnChgMember.getAttribute('data-status') === 'admin'){
             btnChgMember.setAttribute('data-status', 'member');
           }
           switchPage();
         });
 
-        const switchPage = (e) =>{
+        const switchPage = () =>{
           switch (btnChgMember.getAttribute('data-status')) {
             case 'member':
               btnChgMember.innerText = 'Admin Login';
               loginTitle.innerText = 'Login';
               kindSwitch.innerHTML = `
-                <div class="form-switch mt-4 text-center">
-                  <span>Member</span>
+                <div class="form-switch mt-4 ps-0 text-center">
+                  <span>Instructors</span>
                   <label>
                     <input type="checkbox" name="kind" class="form-check-input ms-1 me-1" role="switch" id="flexSwitchCheckDefault"/>
                   </label>
-                  <span>Instructors</span>
+                  <span>Member</span>
                 </div> 
               `
               break;
@@ -95,14 +95,23 @@
                 });
                 const result = await response.json();
                 console.log("Success:", result.result);
-                if (isMember) {
+                if(btnChgMember.getAttribute('data-status') === 'member'){    // Member/instructor
+                  if (isMember) {
                     sessionStorage.setItem("sid", result.result.sid);
                     sessionStorage.setItem("mid", result.result.mid);
-                    location.replace("./member.html")
-                } else {
+                    location.replace("../html/member.html")
+                  } else {
                     sessionStorage.setItem("sid", result.result.sid);
                     sessionStorage.setItem("iid", result.result.iid);
-                    location.replace("./instructor.html");
+                    console.log('instructor')
+                    location.replace("../html/instructor.html");
+                  } 
+                }
+                else {  // Admin
+                  sessionStorage.setItem("sid", result.result.sid);
+                  sessionStorage.setItem("aid", result.result.aid);
+                  console.log('admin')
+                  location.replace("../html/AdminDashboard.html");
                 }
             } catch (error) {
                 console.log("Error:", error);
@@ -110,8 +119,9 @@
         }
 
         document.querySelector("form").addEventListener("submit", (e) => {
-            e.preventDefault();
-            let reqData = new FormData();
+          e.preventDefault();
+          let reqData = new FormData();
+          if(btnChgMember.getAttribute('data-status') === 'member'){    // Member/Instructor
             const email = document.querySelectorAll("input")[0].value;
             const password = document.querySelectorAll("input")[1].value;
             const kind = document.querySelectorAll("input")[2].checked ? "on" : "off";
@@ -119,7 +129,13 @@
             reqData.append("email", email);
             reqData.append("password", password);
             reqData.append("kind", kind);
-            postRequest(reqData);
+          }else{    // Admin
+            const email = document.querySelectorAll("input")[0].value;
+            const password = document.querySelectorAll("input")[1].value;
+            reqData.append("email", email);
+            reqData.append("password", password);
+          }
+          postRequest(reqData);
         })
 
     </script>
