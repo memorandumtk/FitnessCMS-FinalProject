@@ -17,3 +17,7 @@ https://l.instagram.com/?u=https%3A%2F%2Fwww.paperstreet.com%2Fblog%2Fhow-to-tra
 ### UPDATE query using `mysqli`
 https://phpdelusions.net/mysqli_examples/update
 https://www.php.net/manual/en/mysqli.prepare.php
+
+
+### How to add several class in 1 line.
+https://codetogo.io/how-to-add-multiple-classes-to-element-in-javascript/
