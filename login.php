@@ -28,7 +28,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             if($data->num_rows > 0) {
                 while($row = $data->fetch_assoc()) {
                     // Checkiing user information is matched.
-                    if($_POST["fname"]==$row["fname"]
+                    if($_POST["email"]==$row["email"]
                     && $_POST["password"]==$row["pass"]) {
                         session_start();
                         $output = ["sid"=>session_id(),"mid"=>$row["mid"]];
