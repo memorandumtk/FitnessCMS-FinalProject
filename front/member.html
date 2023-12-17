@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -182,7 +183,206 @@
         let workoutCardDiv = document.querySelector(".workout-card");
         let workoutFormDiv = document.querySelector(".workout-form-div");
         let requestForm = document.querySelector(".workout-form");
-        // Add event listener to form request.
+        let messageBtnDiv = document.querySelector(".workout-form-message");
+        let allWorkoutsBtn = document.querySelectorAll("#header-container button")[0];
+        let myWorkoutsBtn = document.querySelectorAll("#header-container button")[1];
+        let messageFromInstructor = document.querySelector(".message-from-instructor");
+
+        // Function making request form visible
+        // and putting instructors' name to option input.
+        const workoutRequestPopper = (e) => {
+            e.preventDefault();
+            requestForm.classList.remove("nonactive");
+            workoutFormDiv.removeChild(messageBtnDiv);
+            requestForm.classList.add("active", "d-flex", "flex-column", "justify-content-center", "gap-2");
+            let instructorsSelect = document.querySelector("#instructors");
+            Instructors.map((Instructor, key) => {
+                console.log(Instructor);
+                let option = document.createElement("option");
+                option.value = Instructor.fname;
+                option.textContent = Instructor.fname + ' ' + Instructor.lname;
+                instructorsSelect.append(option);
+            });
+        }
+
+        // Function displaying "messages" from instructor.
+        const messageFromInstructorPopper = () => {
+            let span = document.querySelector(".message-from-instructor p span");
+            span.textContent = memberInfo.ifname;
+            let notes = document.querySelectorAll(".message-from-instructor p")[1];
+            notes.textContent = memberInfo.note;
+            if (messageFromInstructor.classList.contains("nonactive")) {
+                messageFromInstructor.classList.remove("nonactive")
+                messageFromInstructor.classList.add("active")
+            // } else {
+            //     messageFromInstructor.classList.remove("active")
+            //     messageFromInstructor.classList.add("nonactive")
+            }
+        }
+
+        // Function displaying "cards" of workouts.
+        const workoutCardPopper = (data) => {
+            console.log(data);
+            let cardsField = document.createElement("div");
+            cardsField.classList.add("row");
+            cardsField.classList.add("row-cols-2");
+            cardsField.classList.add("row-cols-md-4");
+            // cardsField.classList.add("row-cols-md-4");
+            cardsField.classList.add("g-2");
+            data.map((workout, key) => {
+                let col = document.createElement("div");
+                col.classList.add("col");
+                let card = document.createElement("div");
+                card.classList.add("card", "h-100", "bg-light", "p-2", "row-gap-2", "justify-content-around");
+                let image = document.createElement("img");
+                image.classList.add("card-img-top", "rounded", "h-auto");
+                image.src = '../assets/image/' + workout.wname + '.jpg';
+                image.alt = 'Image of ' + workout.wname;
+
+                let description = document.createElement("div");
+                description.classList.add("d-flex", "justify-content-between", "px-2", "align-items-center");
+                let smallDiv = document.createElement("div");
+                smallDiv.classList.add("d-flex", "flex-column");
+                let title = document.createElement("span");
+                title.classList.add("card-title");
+                title.textContent = workout.wname;
+                let target = document.createElement("span");
+                target.classList.add("card-text");
+                target.textContent = workout.target;
+                let type = document.createElement("img");
+                type.classList.add("type-img");
+                type.src = '../assets/type/' + workout.type + '.svg';
+                type.alt = 'Svg image of ' + workout.type;
+                smallDiv.append(title, target);
+                description.append(smallDiv, type);
+
+                let setsReps = document.createElement("div");
+                setsReps.classList.add("d-flex", "justify-content-around", "align-items-center");
+                let setsDiv = document.createElement("div");
+                setsDiv.classList.add("d-flex", "flex-column", "justify-content-evenly", "align-items-center");
+                let sets = document.createElement("span");
+                sets.textContent = workout.reps;
+                sets.classList.add("sets");
+                let setsText = document.createElement("span");
+                setsText.textContent = "sets";
+                setsText.classList.add("sets-unit");
+                setsDiv.append(sets, setsText);
+                let repsDiv = document.createElement("div");
+                repsDiv.classList.add("d-flex", "flex-column", "justify-content-evenly", "align-items-center");
+                let reps = document.createElement("span");
+                reps.textContent = workout.reps;
+                reps.classList.add("reps");
+                let repsText = document.createElement("span");
+                repsText.textContent = "reps";
+                repsText.classList.add("reps-unit");
+                repsDiv.append(reps, repsText);
+                let targetImage = document.createElement("span");
+                targetImage.textContent = workout.target;
+                setsReps.append(setsDiv, repsDiv, targetImage);
+
+                card.append(image, description, setsReps);
+                col.append(card);
+                cardsField.append(col);
+            })
+            workoutCardDiv.append(cardsField);
+        }
+
+        // Function to get myworkout data.
+        const getMyWorkoutData = () => {
+            let reqData = new FormData();
+            const mid = sessionStorage.getItem("mid");
+            reqData.append("mid", mid);
+            reqData.append("mode", "get-my-workouts");
+            xmlReq.Post(reqData).then(
+                (data) => {
+                    // This data should be array.
+                    myWorkoutData = JSON.parse(data);
+                },
+                (rej) => {
+                    console.log(rej);
+                }
+            )
+        }
+
+        // Function to get all of workout data.
+        const getAllWorkoutData = () => {
+            let reqData = new FormData();
+            reqData.append("mode", "get-all-workouts");
+            xmlReq.Post(reqData).then(
+                (data) => {
+                    // This data should be array.
+                    myWorkoutData = JSON.parse(data);
+                },
+                (rej) => {
+                    console.log(rej);
+                }
+            )
+        }
+
+        // Function producing button taking user to seeing form 
+        // or producing workout cards.
+        const workoutHandler = () => {
+            // if (memberInfo.status===null) {
+            // below condition is for test
+            if (memberInfo.status === null || memberInfo.status == "pending") {
+                let message = document.createElement("h2");
+                message.textContent = "You don't have a workout program yet";
+                let requestBtn = document.createElement("button");
+                requestBtn.type = "button";
+                requestBtn.textContent = "Request Workout";
+                requestBtn.classList.add("btn", "btn-success");
+
+                messageBtnDiv.classList.add("d-flex", "flex-column", "justify-content-center", "align-items-center");
+                messageBtnDiv.append(message, requestBtn);
+
+                workoutDiv.classList.add("rounded-4", "bg-light", "d-flex", "flex-column", "justify-content-center", "align-items-center", "p-4")
+                requestBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    workoutRequestPopper(e);
+                })
+            } else {
+                getMyWorkoutData();
+                workoutMessagePopper();
+                workoutCardPopper(myWorkoutData);
+                messageFromInstructorPopper();
+            }
+        }
+
+        // Refreshing workout cards div.
+        const removeCards = () => {
+            while (workoutCardDiv.firstChild) {
+                workoutCardDiv.removeChild(workoutCardDiv.firstChild);
+            }
+        }
+
+        // Making form invisible.
+        const formInvisible = () => {
+            if (!workoutFormDiv.classList.contains("nonactive")) {
+                workoutFormDiv.classList.add("nonactive");
+            };
+        }
+
+        // Add eventlistener to dispaly all workouts
+        allWorkoutsBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            formInvisible();
+            removeCards();
+            getAllWorkoutData();
+            workoutCardPopper(allWorkoutData);
+        });
+
+        // Add eventlistener to dispaly my workouts
+        myWorkoutsBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            formInvisible();
+            removeCards();
+            getMyWorkoutData();
+            workoutCardPopper(myWorkoutData);
+            messageFromInstructorPopper();
+        });
+
+        // Add event listener to make and send form request
+        // and take user to initial page after submitting form.
         requestForm.addEventListener("submit", (e) => {
             e.preventDefault();
             const sid = sessionStorage.getItem("sid");
