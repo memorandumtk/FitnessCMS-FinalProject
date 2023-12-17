@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2023 at 03:51 AM
+-- Generation Time: Dec 16, 2023 at 07:19 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -20,6 +20,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `orca_fitness`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `instructor_member_tb`
+--
+
+CREATE TABLE `instructor_member_tb` (
+  `imid` mediumint(9) NOT NULL COMMENT 'Primary key of this table',
+  `iid` mediumint(9) NOT NULL COMMENT 'ID of instructor',
+  `mid` mediumint(9) DEFAULT NULL COMMENT 'ID of member',
+  `requested_date` date NOT NULL DEFAULT current_timestamp() COMMENT 'Date requested'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Relation of instructors and members';
 
 -- --------------------------------------------------------
 
@@ -63,12 +76,12 @@ CREATE TABLE `member_tb` (
   `phone` varchar(50) DEFAULT NULL COMMENT 'Phone number',
   `gender` varchar(50) DEFAULT NULL COMMENT 'Gender',
   `joined` date DEFAULT NULL COMMENT 'Joined date',
-  `menu` mediumint(9) DEFAULT NULL COMMENT 'ID of workout menu',
+  `status` varchar(50) DEFAULT NULL COMMENT 'Status of workout request',
   `level` varchar(50) DEFAULT NULL COMMENT 'Difficulty level',
   `goal` varchar(50) DEFAULT NULL COMMENT 'Members'' own goal',
   `days` mediumint(11) DEFAULT NULL COMMENT 'Available days per week',
-  `note` varchar(100) DEFAULT NULL COMMENT 'Members'' note',
-  `iid` mediumint(9) DEFAULT NULL COMMENT 'ID of instructor',
+  `note` text DEFAULT NULL COMMENT 'Members'' note',
+  `ifname` varchar(50) DEFAULT NULL COMMENT 'First name of instructor',
   `age` mediumint(9) DEFAULT NULL COMMENT 'Age of member'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -76,10 +89,23 @@ CREATE TABLE `member_tb` (
 -- Dumping data for table `member_tb`
 --
 
-INSERT INTO `member_tb` (`mid`, `fname`, `lname`, `email`, `pass`, `phone`, `gender`, `joined`, `menu`, `level`, `goal`, `days`, `note`, `iid`, `age`) VALUES
-(1, 'Kosuke', 'Takagi', 'kosuke@example.com', 'kosuke', '1234561234', 'male', '2023-12-14', 1234, 'intermidiate', 'burn fat', 3, NULL, NULL, 24),
-(2, 'test1', 'some1', 'test1@example.com', 'test1', '4567897564', 'female', '2023-12-20', NULL, 'advanced', 'build muscle', 4, NULL, NULL, 56),
+INSERT INTO `member_tb` (`mid`, `fname`, `lname`, `email`, `pass`, `phone`, `gender`, `joined`, `status`, `level`, `goal`, `days`, `note`, `ifname`, `age`) VALUES
+(1, 'Kosuke', 'Takagi', 'kosuke@example.com', 'kosuke', '1234561234', 'male', '2023-12-14', NULL, 'intermidiate', 'burn fat', 2, 'test3', NULL, 24),
+(2, 'test1', 'some1', 'test1@example.com', 'test1', '4567897564', 'female', '2023-12-20', NULL, 'beginner', 'burn fat', 6, 'test2', NULL, 56),
 (5, 'test2', 'some2', 'test2@example.com', 'test2', '1234561256', 'male', '2023-12-24', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workout_member_tb`
+--
+
+CREATE TABLE `workout_member_tb` (
+  `wmid` mediumint(9) NOT NULL COMMENT 'Primary key of table',
+  `wid` mediumint(9) NOT NULL COMMENT 'ID of workout',
+  `mid` mediumint(9) NOT NULL COMMENT 'ID of member',
+  `assigned_date` date NOT NULL COMMENT 'Date assigned workout'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Relation of workouts and members';
 
 -- --------------------------------------------------------
 
@@ -112,6 +138,14 @@ INSERT INTO `workout_tb` (`wid`, `wname`, `target`, `difficulty`, `sets`, `reps`
 --
 
 --
+-- Indexes for table `instructor_member_tb`
+--
+ALTER TABLE `instructor_member_tb`
+  ADD PRIMARY KEY (`imid`) USING BTREE,
+  ADD KEY `fk_mid_i` (`mid`),
+  ADD KEY `fk_iid_i` (`iid`);
+
+--
 -- Indexes for table `instructor_tb`
 --
 ALTER TABLE `instructor_tb`
@@ -124,6 +158,14 @@ ALTER TABLE `member_tb`
   ADD PRIMARY KEY (`mid`);
 
 --
+-- Indexes for table `workout_member_tb`
+--
+ALTER TABLE `workout_member_tb`
+  ADD PRIMARY KEY (`wmid`),
+  ADD KEY `fk_mid_w` (`mid`),
+  ADD KEY `fk_wid_w` (`wid`);
+
+--
 -- Indexes for table `workout_tb`
 --
 ALTER TABLE `workout_tb`
@@ -132,6 +174,12 @@ ALTER TABLE `workout_tb`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `instructor_member_tb`
+--
+ALTER TABLE `instructor_member_tb`
+  MODIFY `imid` mediumint(9) NOT NULL AUTO_INCREMENT COMMENT 'Primary key of this table';
 
 --
 -- AUTO_INCREMENT for table `instructor_tb`
@@ -146,10 +194,34 @@ ALTER TABLE `member_tb`
   MODIFY `mid` mediumint(9) NOT NULL AUTO_INCREMENT COMMENT 'Member''s id', AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `workout_member_tb`
+--
+ALTER TABLE `workout_member_tb`
+  MODIFY `wmid` mediumint(9) NOT NULL AUTO_INCREMENT COMMENT 'Primary key of table';
+
+--
 -- AUTO_INCREMENT for table `workout_tb`
 --
 ALTER TABLE `workout_tb`
   MODIFY `wid` mediumint(9) NOT NULL AUTO_INCREMENT COMMENT 'ID of workout', AUTO_INCREMENT=5;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `instructor_member_tb`
+--
+ALTER TABLE `instructor_member_tb`
+  ADD CONSTRAINT `fk_iid_i` FOREIGN KEY (`iid`) REFERENCES `instructor_tb` (`iid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_mid_i` FOREIGN KEY (`mid`) REFERENCES `member_tb` (`mid`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `workout_member_tb`
+--
+ALTER TABLE `workout_member_tb`
+  ADD CONSTRAINT `fk_mid_w` FOREIGN KEY (`mid`) REFERENCES `member_tb` (`mid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_wid_w` FOREIGN KEY (`wid`) REFERENCES `workout_tb` (`wid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

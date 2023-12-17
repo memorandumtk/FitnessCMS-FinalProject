@@ -12,3 +12,8 @@ https://docs.google.com/presentation/d/1s1qdlsV4GQce5B9OehHRNOKkDKcQdBwag9DifnOj
 ## Useful site
 ### Myspl database on xampp import and export
 https://l.instagram.com/?u=https%3A%2F%2Fwww.paperstreet.com%2Fblog%2Fhow-to-transfer-your-php-mysql-site-to-xampp-for-local-development-and-debugging%2F&e=undefined
+
+
+### UPDATE query using `mysqli`
+https://phpdelusions.net/mysqli_examples/update
+https://www.php.net/manual/en/mysqli.prepare.php
