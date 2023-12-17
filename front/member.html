@@ -35,15 +35,15 @@
             <h3>
                 My Workout Program
             </h3>
-            <div>
+            <div class="workout-text">
                 Messages from instructor comes here...
             </div>
         </div>
 
         <div>
             <div class="workout">
-                Program for memeber comes here...
             </div>
+
             <div>
                 <form class="workout-form nonactive">
                     <fieldset>
@@ -77,7 +77,7 @@
                     <label for="instructors">3. Which instructors would you like to work with?</label>
                     <select name="instructors" id="instructors">
                         <option value="">--Please choose an option--</option>
-                        <option value="example">example</option>
+                        <option value="Arnold">Arnold</option>
                     </select>
 
                     <fieldset>
@@ -115,17 +115,21 @@
         const memberPhp = "http://localhost/php/FitnessCMS-FinalProject/members.php";
         let xmlReq = new XMLReq(memberPhp);
 
-        let workout;
+        let memberInfo;
+        let workoutData = [];
         let workoutDiv = document.querySelector(".workout");
         let requestForm = document.querySelector(".workout-form");
-        requestForm.addEventListener("submit", (e)=>{
+        // Add event listener to form request.
+        requestForm.addEventListener("submit", (e) => {
             e.preventDefault();
             const sid = sessionStorage.getItem("sid");
             const mid = sessionStorage.getItem("mid");
             let reqData = new FormData(e.target);
             reqData.append("sid", sid);
             reqData.append("mid", mid);
-            reqData.append("mode", "display")
+            // After submitting form of workout request.
+            reqData.append("status", "pending")
+            reqData.append("mode", "form")
             xmlReq.Post(reqData).then(
                 (data) => {
                     console.log(data);
@@ -136,13 +140,55 @@
             )
 
         })
+        // Function making request form visible.
         const workoutRequestPopper = (e) => {
             e.preventDefault();
             requestForm.classList.remove("nonactive");
             requestForm.classList.add("active");
         }
-        const workoutHandler = (workout) => {
-            if (!workout) {
+        // Function displaying cards of workouts.
+        const workoutCardPopper = () => {
+            console.log(workoutData);
+            let cardsField = document.createElement("div");
+            cardsField.classList.add("row");
+            cardsField.classList.add("row-cols-1");
+            cardsField.classList.add("row-cols-md-4");
+            // cardsField.classList.add("row-cols-md-4");
+            cardsField.classList.add("g-2");
+            workoutData.map((workout, key) => {
+                let col = document.createElement("div");
+                col.classList.add("col");
+                let card = document.createElement("div");
+                card.classList.add("card");
+                card.classList.add("bg-light");
+                let image = document.createElement("img");
+                image.classList.add("card-img-top");
+                image.src = `${workout.title}`;
+                image.alt = `Image of ${workout.wname}`
+                let title = document.createElement("p");
+                title.classList.add("card-title");
+                title.textContent = workout.wname;
+                let target = document.createElement("p");
+                target.classList.add("card-text");
+                target.textContent = workout.target;
+                let type = document.createElement("p");
+                type.textContent = workout.type;
+                let sets = document.createElement("p");
+                sets.textContent = workout.reps;
+                let reps = document.createElement("p");
+                reps.textContent = workout.reps;
+                let targetImage = document.createElement("p");
+                targetImage.textContent = workout.target;
+                card.append(image, title, target, type, sets, reps, targetImage);
+                col.append(card);
+                cardsField.append(col);
+            })
+            workoutDiv.append(cardsField);
+        }
+        // Function producing button leading form 
+        // or producing workout cards.
+        const workoutHandler = () => {
+            if (memberInfo.status === null) {
                 workoutDiv.textContent = "haven't create program";
                 let requestBtn = document.createElement("button");
                 requestBtn.type = "button";
@@ -153,7 +199,20 @@
                 })
                 workoutDiv.append(requestBtn);
             } else {
-                workoutDiv.textContent = "create program!";
+                let reqData = new FormData();
+                const mid = sessionStorage.getItem("mid");
+                reqData.append("mid", mid);
+                reqData.append("mode", "cards");
+                xmlReq.Post(reqData).then(
+                    (data) => {
+                        // This data should be array.
+                        workoutData = JSON.parse(data);
+                        workoutCardPopper();
+                    },
+                    (rej) => {
+                        console.log(rej);
+                    }
+                )
             }
         }
 
@@ -167,8 +226,8 @@
             xmlReq.Post(reqData).then(
                 (data) => {
                     console.log(data);
-                    workout = JSON.parse(data).menu;
-                    workoutHandler(workout);
+                    memberInfo = JSON.parse(data);
+                    workoutHandler();
                 },
                 (rej) => {
                     console.log(rej);
