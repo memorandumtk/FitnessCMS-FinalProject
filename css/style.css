@@ -15,6 +15,7 @@ a{
   justify-content: space-between;
   padding: 0 12px;
 }
+
 .headerleft{
   display: flex;
   align-items: center;
