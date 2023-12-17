@@ -2,6 +2,7 @@ class XMLReq{
   constructor(uri){
      this.uri = uri;
   }
+  
   #xmlreq(method,data=""){
      let dataPromise = new Promise((res,rej)=>{
         let xhr = new XMLHttpRequest();
