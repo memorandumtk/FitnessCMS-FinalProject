@@ -16,10 +16,14 @@ switch($_SERVER["REQUEST_METHOD"]) {
             echo("DB connection error ".$conn->connect_error);
         } else {
             // Changing the table of query based on the value of toggle input.
-            if(isset($_POST["kind"]) && $_POST["kind"] == "on") {
-                $selectQuery = "SELECT * FROM `member_tb`";
+            if(isset($_POST["kind"])) {
+                if($_POST["kind"] == "on"){
+                    $selectQuery = "SELECT * FROM `member_tb`"; //member
+                }else{
+                    $selectQuery = "SELECT * FROM `instructor_tb`"; //instructor
+                }
             } else {
-                $selectQuery = "SELECT * FROM `instructor_tb`";
+                $selectQuery = "SELECT * FROM `admin_tb`";  //admin
             }
             $data = $conn->query($selectQuery);
             $conn->close();
@@ -31,20 +35,29 @@ switch($_SERVER["REQUEST_METHOD"]) {
                     if($_POST["email"]==$row["email"]
                     && $_POST["password"]==$row["pass"]) {
                         session_start();
-                        $output = ["sid"=>session_id(),"mid"=>$row["mid"]];
-                        echo json_encode(["result"=>$output]);
+                        if(isset($_POST["kind"])) {
+                            if($_POST["kind"] == "on"){
+                                $output = ["sid"=>session_id(),"id"=>$row["mid"],"uname"=>$row["fname"]];   //member
+                            }else{
+                                $output = ["sid"=>session_id(),"id"=>$row["iid"],"uname"=>$row["fname"]];   //instructor
+                            }
+                        } else {
+                            $output = ["sid"=>session_id(),"id"=>$row["aid"],"uname"=>$row["fname"]];   //admin
+                        }
+                        
+                        echo json_encode($output);
                         break;
                     }
                 }
                 if ($output==[]) {
-                    echo json_encode(["result"=>"user not found"]);
+                    echo ("user not found");
                 }
             } else {
-                echo json_encode(["result"=>"no user data"]);
+                echo ("no user data");
             }
         }
         break;
     default:
-        echo json_encode(["result"=>"it is not post."]);
+        echo ("it is not post.");
         break;
 }

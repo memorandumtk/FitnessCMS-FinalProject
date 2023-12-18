@@ -18,7 +18,6 @@
     </div>
     <div class="header-button-container">
         <button type="button" class="btn btn-danger">Logout</button>
-        
     </div>
 </div>
   <div class="contain">
@@ -67,89 +66,96 @@
 </body>
 <script type="module">
   import XMLReq from "../js/XMLReq.js";
-  let xmlReq = new XMLReq("http://localhost/finalproject/FitnessCMS-FinalProject/member.php");
+  let xmlReq = new XMLReq("http://localhost/FitnessCMS-FinalProject/member.php");
+
   let btn = document.querySelectorAll("button")[0];
-   btn.addEventListener("click",()=>{
-        sessionStorage.removeItem("uname");
-        location.replace("./admin.login.html");
-    });
+  btn.addEventListener("click",()=>{
+    sessionStorage.removeItem("sid");
+    sessionStorage.removeItem("id");
+    sessionStorage.removeItem("uname");
+    location.replace("./login.html");
+  });
+
   const mdeleteHandler =(pr)=>{
- console.log(pr);
- let mdelete =pr
- let reqData = new FormData();
+    console.log(pr);
+    let mdelete = pr;
+    let reqData = new FormData();
     reqData.append("req", "mdel");
     reqData.append("mdel",JSON.stringify(mdelete));
     xmlReq.Post(reqData).then(
       (data)=>console.log(data),
       (rej) => console.log(rej)
     )
-    location.reload(true)
+    location.reload(true);
   }
+
   const ideleteHandler =(pr)=>{
- console.log(pr);
- let idelete =pr
- let reqData = new FormData();
+    console.log(pr);
+    let idelete = pr;
+    let reqData = new FormData();
     reqData.append("req", "idel");
     reqData.append("idel",JSON.stringify(idelete));
     xmlReq.Post(reqData).then(
       (data)=>console.log(data),
       (rej) => console.log(rej)
     )
-    location.reload(true)
+    location.reload(true);
   }
+
   const table =(data)=>{
-    if(sessionStorage.getItem("sid")!=undefined){
+    if(sessionStorage.getItem("sid") != "undefined"){
+      console.log(sessionStorage.getItem("sid"));
       document.querySelector("#welcome-h1").innerText += ` ${sessionStorage.getItem("uname")}`;
-    let newArr =JSON.parse(data)
-    let member = newArr[0];
-    let instructor = newArr[1];
-    let mtable = document.querySelectorAll("tbody")[0];
-    for(let pr of member){
-      let tr = document.createElement("tr")
-      for(let key in pr){
-        const td = document.createElement("td");
-        td.innerText=pr[key];
-        tr.append(td)
+      let newArr = JSON.parse(data)
+      let member = newArr[0];
+      let instructor = newArr[1];
+      let mtable = document.querySelectorAll("tbody")[0];
+      for(let pr of member){
+        let tr = document.createElement("tr");
+        for(let key in pr){
+          const td = document.createElement("td");
+          td.innerText = pr[key];
+          tr.append(td);
+        }
+        let btntd = document.createElement("td");
+        let btn = document.createElement("button");
+        btn.innerText = "Delete";
+        btn.addEventListener("click",function(e){
+          mdeleteHandler(pr);
+          // console.log(pr);
+        })
+        btntd.append(btn);
+        tr.append(btntd);
 
+        mtable.append(tr);
       }
-      let btntd = document.createElement("td")
-      let btn =document.createElement("button")
-            btn.innerText="Delete";
-            btn.addEventListener("click",function(e){
-              mdeleteHandler(pr)
-              // console.log(pr);
-            })
-            btntd.append(btn);
-            tr.append(btntd)
-
-      mtable.append(tr)
-    }
-    let itable = document.querySelectorAll("tbody")[1];
-    for(let pr of instructor){
-      let tr = document.createElement("tr")
-      for(let key in pr){
-        const td = document.createElement("td");
-        td.innerText=pr[key];
-        tr.append(td)
-
+      let itable = document.querySelectorAll("tbody")[1];
+      for(let pr of instructor){
+        let tr = document.createElement("tr");
+        for(let key in pr){
+          const td = document.createElement("td");
+          td.innerText = pr[key];
+          tr.append(td);
+        }
+        let btntd = document.createElement("td");
+        let btn =document.createElement("button");
+        btn.innerText="Delete";
+        btntd.append(btn);
+        btn.addEventListener("click",function(e){
+          ideleteHandler(pr);
+        })
+        tr.append(btntd);
+        itable.append(tr);
       }
-      let btntd = document.createElement("td")
-      let btn =document.createElement("button")
-            btn.innerText="Delete";
-            btntd.append(btn);
-            btn.addEventListener("click",function(e){
-              ideleteHandler(pr);
-            })
-            tr.append(btntd)
-
-      itable.append(tr)
-    }
     
-  }else{
-    location.replace("./AdminDashboard.html");
+    }else{
+      sessionStorage.removeItem("sid");
+      sessionStorage.removeItem("id");
+      sessionStorage.removeItem("uname");
+      location.replace("./login.html");
+    }
   }
 
-  }
   function load (){
     let reqData = new FormData();
     reqData.append("req", "read");
@@ -157,7 +163,6 @@
       table,
       (rej) => console.log(rej)
     )
-
   }
   
   load();

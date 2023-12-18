@@ -1,6 +1,15 @@
 <?php
+include './config.php';
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
+// Database connection setting
+$conn = new mysqli(
+    $dbServer,
+    $dbUser,
+    $dbPass,
+    $dbName
+);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   switch ($_POST["req"]) {
     case "mreg":
@@ -12,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $email = $_POST["email"];
       $pass = $_POST["pass"];
 
-      $conn = new mysqli("localhost", "phpagent", "orca123", "orca_fitness");
+      // $conn = new mysqli("localhost", "phpagent", "orca123", "orca_fitness");
       if ($conn->connect_error) {
         die("Connection Failed :" . $conn->connect_error);
       } else {
@@ -24,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->close();
       }
       break;
+
     case "ireg":
       $fname = $_POST["fname"];
       $lname = $_POST["lname"];
@@ -33,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $email = $_POST["email"];
       $pass = $_POST["pass"];
 
-      $conn = new mysqli("localhost", "phpagent", "orca123", "orca_fitness");
+      // $conn = new mysqli("localhost", "phpagent", "orca123", "orca_fitness");
       if ($conn->connect_error) {
         die("Connection Failed :" . $conn->connect_error);
       } else {
@@ -45,8 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->close();
       }
       break;
+
     case "read":
-      $conn = new mysqli("localhost", "phpagent", "orca123", "orca_fitness");
+      $aid = $_POST["aid"];
+      // $conn = new mysqli("localhost", "phpagent", "orca123", "orca_fitness");
       if ($conn->connect_error) {
         die("Connection Failed :" . $conn->connect_error);
       } else {
@@ -70,10 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($arr);
       }
       break;
+
     case "mdel":
       $mdel = json_decode($_POST['mdel']);
       $memail = $mdel->email;
-      $conn = new mysqli("localhost", "phpagent", "orca123", "orca_fitness");
       echo ($memail);
       if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -87,10 +99,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
       $conn->close();
       break;
+
     case "idel":
       $idel = json_decode($_POST['idel']);
       $iemail = $idel->email;
-      $conn = new mysqli("localhost", "phpagent", "orca123", "orca_fitness");
       echo ($iemail);
       if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -104,12 +116,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
       $conn->close();
       break;
+
     case "login";
-      $conn = new mysqli("localhost", "phpagent", "orca123", "orca_fitness");
       if ($conn->connect_error) {
         die("Connection Failed :" . $conn->connect_error);
       } else {
-        $ad = "SELECT fname,lname,email,pass FROM adimn_tb ";
+        $ad = "SELECT fname,lname,email,pass FROM admin_tb ";
         $adata = $conn->query($ad);
         $conn->close();
         $output = [];
