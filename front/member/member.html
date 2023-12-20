@@ -185,6 +185,7 @@
         let messageBtnDiv = document.querySelector(".workout-form-message");
         let allWorkoutsBtn = document.querySelectorAll("#header-container button")[0];
         let myWorkoutsBtn = document.querySelectorAll("#header-container button")[1];
+        let logoutsBtn = document.querySelectorAll("#header-container button")[2];
         let messageFromInstructor = document.querySelector(".message-from-instructor");
         let h3title = document.querySelector("main h3");
         let isMessageFromInstructor = false;
@@ -313,7 +314,7 @@
             xmlReq.Post(reqData).then(
                 (data) => {
                     // This data should be array.
-                    myWorkoutData = JSON.parse(data);
+                    allWorkoutData = JSON.parse(data);
                 },
                 (rej) => {
                     console.log(rej);
@@ -391,6 +392,15 @@
             h3title.children[0].textContent = "My";
         });
 
+
+        logoutsBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem("sid");
+            sessionStorage.removeItem("mid");
+            location.replace("../login.html")
+        })
+
+
         // Add event listener to make and send form request
         // and take user to initial page after submitting form.
         requestForm.addEventListener("submit", (e) => {
@@ -418,6 +428,7 @@
         function load() {
             const sid = sessionStorage.getItem("sid");
             const mid = sessionStorage.getItem("mid");
+            if(mid===null)location.replace("../login.html");
             let reqData = new FormData();
             reqData.append("sid", sid);
             reqData.append("mid", mid);

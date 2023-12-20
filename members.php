@@ -142,7 +142,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
                         // -
                         // -
                         $output=[];
-                        $sql = "SELECT * FROM `workouts_tb`";
+                        $sql = "SELECT * FROM `programs_tb`";
                         $stmt= $conn->prepare($sql);
                         $stmt->execute();
                         $result = $stmt->get_result();
@@ -164,8 +164,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
                 if ($conn->connect_error) {
                     echo("DB connection error ".$conn->connect_error);
                 } else {
-                    // $mid = $_POST["mid"];
-                    // Getting workout data.
+                    // Getting workout data from workouts table.
                     $output=[];
                     $sql = "SELECT * FROM `workouts_tb`";
                     $stmt= $conn->prepare($sql);
