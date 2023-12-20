@@ -142,7 +142,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
                         // -
                         // -
                         $output=[];
-                        $sql = "SELECT * FROM `workout_tb`";
+                        $sql = "SELECT * FROM `workouts_tb`";
                         $stmt= $conn->prepare($sql);
                         $stmt->execute();
                         $result = $stmt->get_result();

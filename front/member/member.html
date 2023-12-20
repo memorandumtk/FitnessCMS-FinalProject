@@ -11,7 +11,7 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link href="./member.css" rel="stylesheet">
+    <link href="../../css/member.css" rel="stylesheet">
     <title>Orca_Member</title>
     <style>
         .active {
@@ -58,7 +58,7 @@
 
 <body>
     <div id="header-container" class="header-class container-fluid">
-        <img src="../orcalogo.png" height="100" style="margin-left: 50px">
+        <img src="../../assets/orcalogo.png" height="100" style="margin-left: 50px">
         <h1 id="welcome-h1"></h1>
         <div class="header-button-container">
             <button type="button" class="btn btn-light">All Workouts</button>
@@ -187,6 +187,7 @@
         let myWorkoutsBtn = document.querySelectorAll("#header-container button")[1];
         let messageFromInstructor = document.querySelector(".message-from-instructor");
         let h3title = document.querySelector("main h3");
+        let isMessageFromInstructor = false;
 
         // Function making request form visible
         // and putting instructors' name to option input.
@@ -207,7 +208,8 @@
 
         // Function displaying "messages" from instructor.
         const messageFromInstructorPopper = () => {
-            if (messageFromInstructor.classList.contains("nonactive")) {
+            if (messageFromInstructor.classList.contains("nonactive")
+                && isMessageFromInstructor) {
                 messageFromInstructor.classList.remove("nonactive")
                 messageFromInstructor.classList.add("active")
             } else {
@@ -236,7 +238,7 @@
                 card.classList.add("card", "h-100", "bg-light", "p-2", "row-gap-2", "justify-content-around");
                 let image = document.createElement("img");
                 image.classList.add("card-img-top", "rounded", "h-auto");
-                image.src = '../assets/image/' + workout.wname + '.jpg';
+                image.src = '../../assets/image/' + workout.wname + '.jpg';
                 image.alt = 'Image of ' + workout.wname;
 
                 let description = document.createElement("div");
@@ -251,7 +253,7 @@
                 target.textContent = workout.target;
                 let type = document.createElement("img");
                 type.classList.add("type-img");
-                type.src = '../assets/type/' + workout.type + '.svg';
+                type.src = '../../assets/type/' + workout.type + '.svg';
                 type.alt = 'Svg image of ' + workout.type;
                 smallDiv.append(title, target);
                 description.append(smallDiv, type);
@@ -344,7 +346,9 @@
             } else {
                 getMyWorkoutData();
                 workoutCardPopper(myWorkoutData);
+                isMessageFromInstructor = true;
                 messageFromInstructorPopper();
+                h3title.children[0].textContent = "My";
             }
         }
 
@@ -369,8 +373,10 @@
             removeCards();
             getAllWorkoutData();
             workoutCardPopper(allWorkoutData);
+            isMessageFromInstructor = false;
             messageFromInstructorPopper();
             h3title.children[0].textContent = "All";
+
         });
 
         // Add eventlistener to dispaly my workouts
@@ -380,6 +386,7 @@
             removeCards();
             getMyWorkoutData();
             workoutCardPopper(myWorkoutData);
+            isMessageFromInstructor = true;
             messageFromInstructorPopper();
             h3title.children[0].textContent = "My";
         });
