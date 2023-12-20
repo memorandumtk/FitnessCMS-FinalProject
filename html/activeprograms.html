@@ -29,10 +29,9 @@
                         <th scope="col">Program ID</th>
                         <th scope="col">Member ID</th>
                         <th scope="col">Member Name</th>
-                        <th scope="col">Instructor ID</th>
                         <th scope="col">Instructor</th>
-                        <th scope="col">Workout IDs</th>
-                        <th scope="col">Notes</th>
+                        <th scope="col">Workout ID</th>
+                        <th scope="col">Instructor Notes</th>
                         <th scope="col">Options</th>
                     </tr>
                 </thead>
@@ -50,6 +49,7 @@
     let xmlReq = new XMLReq("http://localhost/php/FitnessCMS-FinalProject/instructor.php");
     let pList = [];
     let pObj = null;
+    let fname = sessionStorage.getItem("fname");
 
     let reqBtn = document.querySelectorAll("button")[0];
     reqBtn.addEventListener("click", ()=>{
@@ -67,7 +67,7 @@
     const loadData=(data)=>{
         let wprograms = (JSON.parse(data));
         for(let prog of wprograms) {
-            pObj = new program(prog.pid, prog.mid, prog.mfname, prog.iid, prog.ifname, prog.wids, prog.inotes);
+            pObj = new program(prog.pid, prog.mid, prog.mfname, prog.ifname, prog.wid, prog.inote);
             pList.push(pObj);
         };
         tablePoper();
@@ -76,6 +76,7 @@
     const load =()=>{
         let reqData = new FormData();   
         reqData.append("mode", "load-programs");
+        reqData.append("fname", fname);
         xmlReq.Post(reqData).then(
             loadData,
             (rej)=>console.log(rej)

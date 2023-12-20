@@ -14,7 +14,6 @@
         <h1 id="welcome-h1">Welcome Instructor</h1>
         <nav class="header-button-container">
             <button type="button" class="btn btn-danger">Logout</button>
-            
         </nav>
     </div>
     <div id="title-container" class="title-class">
@@ -33,6 +32,7 @@
                         <th scope="col">Difficulty</th>
                         <th scope="col">Sets</th>
                         <th scope="col">Reps</th>
+                        <th scope="col">Note</th>
                         <th scope="col">Option</th>
                     </tr>
                 </thead>
@@ -41,8 +41,7 @@
                 </tbody>
             </table>
             <div id="tf-container">
-                <textarea rows="5" cols="125" style="border-radius: 10px; padding: 5px; border: none;"></textarea>
-                <button class="btn-create" id="create-button">Create Program</button>
+                <button class="btn-finish" id="create-button">Finish</button>
             </div>
         </div>
     </div>
@@ -52,7 +51,6 @@
     import workout from "../js/workoutClass.js";
     let mname = sessionStorage.getItem("mname");
     let memid = sessionStorage.getItem("memid");
-    let pworkouts = sessionStorage.getItem("pWorkouts");
 
     document.getElementById("member-name-header").innerText=mname;
 
@@ -63,32 +61,21 @@
 
 
 
-    const createProgram=()=>{
-        let inotes = document.querySelector("textarea");
-        if (inotes.value == ""){
-            alert("Don't forget to add a note to your customer!");
-        } else {
-            sessionStorage.setItem("inotes", inotes.value);
-            let ifname = sessionStorage.getItem("fname");
-            let reqData = new FormData();
-            reqData.append("mode", "create");
-            reqData.append("inotes", inotes.value);
+    const finishCreating=()=>{
+        let reqData = new FormData();
+            reqData.append("mode", "finish");
             reqData.append("memid", memid);
-            reqData.append("mfname", mname);
-            reqData.append("workouts", pworkouts);
-            reqData.append("ifname", ifname);
             xmlReq.Post(reqData).then(
-                alert("Program created"),
+                alert("Program is active!"),
                 (rej)=>console.log(rej)
             );
-            sessionStorage.removeItem("pWorkouts");
-            sessionStorage.removeItem("inotes");
-            location.replace("./instructor.html");
-        }
+        sessionStorage.removeItem("mname");
+        sessionStorage.removeItem("memid");
+        location.replace("./instructor.html");
     };
 
-    let createBtn = document.getElementById("create-button");
-    createBtn.addEventListener("click", createProgram);
+    let finishBtn = document.getElementById("create-button");
+    finishBtn.addEventListener("click", finishCreating);
     
 
     const tablePoper=()=>{

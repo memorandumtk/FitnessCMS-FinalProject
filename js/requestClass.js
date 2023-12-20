@@ -1,5 +1,5 @@
 import XMLReq from "./XMLReq.js";
-let xmlReq = new XMLReq("http://localhost/php/FinalProject-Orcainstructor/instructor.php");
+let xmlReq = new XMLReq("http://localhost/php/FitnessCMS-FinalProject/instructor.php");
 
 class request {
     constructor(rid, mid, mfname, mlname, dlevel, dpw, instructor, goal, notes) {
@@ -29,7 +29,7 @@ class request {
       const acceptPress=(e)=>{
         sessionStorage.setItem("memid", this.mid);
         sessionStorage.setItem("mname", this.mfname);
-        // e.target.parentElement.parentElement.style.display = "none";
+        e.target.parentElement.parentElement.style.display = "none";
         location.replace("./createprogram.html");
       };
       aBtn.addEventListener("click", acceptPress);
@@ -41,6 +41,7 @@ class request {
         reqData.append("mid", this.mid);
         xmlReq.Post(reqData).then(
             alert("Request rejected"),
+            // console.log(this.mid),
             (rej)=>console.log(rej)
         );
       }

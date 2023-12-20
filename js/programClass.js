@@ -1,16 +1,15 @@
 import XMLReq from "./XMLReq.js";
-let xmlReq = new XMLReq("http://localhost/php/FinalProject-Orcainstructor/instructor.php");
+let xmlReq = new XMLReq("http://localhost/php/FitnessCMS-FinalProject/instructor.php");
 let pList = [];
 
 class program {
-    constructor(pid, mid, mfname, iid, ifname, wids, inotes) {
+    constructor(pid, mid, mfname, ifname, wid, inote) {
       this.pid = pid;
       this.mid = mid;
       this.mfname = mfname;
-      this.iid = iid;
       this.ifname = ifname;
-      this.wids = wids;
-      this.inotes = inotes;
+      this.wid = wid;
+      this.inote = inote;
   
       const endBtn = document.createElement("button");
       endBtn.innerText = "End";
@@ -23,6 +22,7 @@ class program {
         let reqData = new FormData();
         reqData.append("mode", "end");
         reqData.append("mid", this.mid);
+        reqData.append("pid", this.pid);
         xmlReq.Post(reqData).then(
             alert("Program ended"),
             (rej)=>console.log(rej)

@@ -1,6 +1,9 @@
 import XMLReq from "./XMLReq.js";
-let xmlReq = new XMLReq("http://localhost/php/FinalProject-Orcainstructor/instructor.php");
-let wList = [];
+let xmlReq = new XMLReq("http://localhost/php/FitnessCMS-FinalProject/instructor.php");
+
+let mname = sessionStorage.getItem("mname");
+let memid = sessionStorage.getItem("memid");
+let ifname = sessionStorage.getItem("fname");
 
 class workout {
     constructor(wid, wname, mtarget, type, diff, sets, reps) {
@@ -11,6 +14,10 @@ class workout {
       this.diff = diff;
       this.sets = sets;
       this.reps = reps;
+
+      const addNote = document.createElement("input");
+      addNote.type = "text";
+      this.addNote = addNote;
   
       const addBtn = document.createElement("button");
       addBtn.innerText = "Add";
@@ -19,10 +26,18 @@ class workout {
       this.addBtn = addBtn;
 
       const addPress=(e)=>{
-          wList.push(this.wid);
-          sessionStorage.setItem("pWorkouts", wList);
-          alert(`${this.wname} added`);
-          e.target.parentElement.parentElement.style.display="none";
+        let reqData = new FormData();
+            reqData.append("mode", "add");
+            reqData.append("memid", memid);
+            reqData.append("mfname", mname);
+            reqData.append("ifname", ifname);
+            reqData.append("wid", this.wid);
+            reqData.append("inote", (this.addNote).value);
+            xmlReq.Post(reqData).then(
+                alert("Workout added to program"),
+                (rej)=>console.log(rej)
+            );
+        e.target.parentElement.parentElement.style.display="none";
       }
       addBtn.addEventListener("click", addPress);
     }

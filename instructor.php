@@ -80,8 +80,8 @@
             };
 
 
-            // Get the created workout program information and adds a new row into the programs database. These will show in the instructors active programs page
-            case "create":
+            // Get the added workout information and adds a new row into the programs table. These will show in the instructors active programs page
+            case "add":
                 $conn = new mysqli($dbServer, $dbUser, $dbPass, $dbName);
             if($conn->connect_error) {
                 echo "DB Connection Error: " . $conn->connect_error;
@@ -89,15 +89,29 @@
                 // Assign received data to variables in order to use them in sql query.
                 $memid = $_POST["memid"];
                 $mfname = $_POST["mfname"];
-                $pworkouts = $_POST["workouts"];
-                $inotes = $_POST["inotes"];
+                $wid = $_POST["wid"];
                 $ifname = $_POST["ifname"];
+                $inote = $_POST["inote"];
 
                 // Create query command, prepare variables and bind parameters in order to correctly execute query. 
-                $query = "INSERT INTO programs_tb (mid, mfname, ifname, wids, inotes) VALUES(?, ?, ?, ?, ?)";
+                $query = "INSERT INTO programs_tb (mid, mfname, ifname, wid, inote) VALUES(?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($query);
-                $stmt->bind_param("issss", $memid, $mfname, $ifname, $pworkouts, $inotes);
+                $stmt->bind_param("issss", $memid, $mfname, $ifname, $wid, $inote);
                 $stmt->execute();
+                $conn->close();
+                break;
+            };
+
+            // Get the added workout information and adds a new row into the programs table. These will show in the instructors active programs page
+            case "finish":
+                $conn = new mysqli($dbServer, $dbUser, $dbPass, $dbName);
+            if($conn->connect_error) {
+                echo "DB Connection Error: " . $conn->connect_error;
+            } else {
+                // Create query command, prepare variables and bind parameters in order to correctly execute query. 
+                $memid = $_POST["memid"];
+                $selectQuery = "DELETE FROM requests_tb WHERE `requests_tb`.`memid`= $memid";
+                $data = $conn->query($selectQuery);
                 $conn->close();
                 break;
             };
@@ -110,7 +124,8 @@
                     echo "DB Connection Error: " . $conn->connect_error;
                 } else {
                     // Get the data where instructor is Arnold
-                    $selectQuery = "SELECT * FROM programs_tb";
+                    $fname = $_POST["fname"];
+                    $selectQuery = "SELECT * FROM programs_tb WHERE `programs_tb`.`ifname`='$fname'";
                     // Run the query string using the $conn connection
                     $data = $conn->query($selectQuery);
                     $outData = [];
@@ -129,22 +144,15 @@
             };
 
 
-            // Finds the members request in database and deletes it
+            // Finds the members program in database and deletes it
             case "end":
                 $conn = new mysqli($dbServer, $dbUser, $dbPass, $dbName);
             if($conn->connect_error) {
                 echo "DB Connection Error: " . $conn->connect_error;
             } else {
-                // Get the data where instructor is Arnold
-                $memid = $_POST["mid"];
-                $selectQuery = "DELETE FROM programs_tb WHERE `programs_tb`.`mid`= $memid";
-                // Run the query string using the $conn connection
+                $pid = $_POST["pid"];
+                $selectQuery = "DELETE FROM programs_tb WHERE `programs_tb`.`pid`= $pid";
                 $data = $conn->query($selectQuery);
-                if($conn->query($insertQuery)===TRUE) {
-                    echo "1 row deleted";
-                } else {
-                    echo "Error: " . $conn->error;
-                };
                 $conn->close();
             break;
             };

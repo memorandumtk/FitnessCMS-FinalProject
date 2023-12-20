@@ -72,15 +72,17 @@ table {
     color: white;
 }
 
-.btn-create {
+.btn-finish {
     border-radius: 10px;
     border-style: none;
-    margin: 35px 20px 35px 50px;
+    margin-top: 25px;
     padding: 15px;
     background-color: rgb(138, 56, 244);
     color: white;
+    width: 100px;
 }
 
 #tf-container {
     display: flex;
+    justify-content: center;
 }
