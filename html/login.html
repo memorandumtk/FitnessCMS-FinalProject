@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <title>Orca_Member</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../instructor.css">
+</head>
+
+<body>
+    <div id="header-container" class="header-class container-fluid">
+      <img src="../orcalogo.png" height="100" style="margin-left: 50px">
+      <h1 id="welcome-h1">Orca Fitness</h1>
+      <div class="header-button-container">
+        <button type="button" class="btn btn-light" id="btnChgMember" data-status="member"></button>
+      </div>
+    </div>
+
+    <main>
+        <div class="mt-5">
+            <h2 class="h1 text-center" id="loginTitle"></h2>
+            <form class="login-form mt-5 p-md-5 m-auto">
+                <div class="mb-4">
+                  <label for="formEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="formEmail" name="email" placeholder="name@example.com" required>
+                </div>
+                <div class="mb-4">
+                  <label for="formPass" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="formPass" name="pass" placeholder="Password" required>
+                </div>
+                <div id="kindSwitch">
+                  <!-- kind switch area -->
+                </div>
+                <div class="d-grid gap-2 col-4 mx-auto mt-5">
+                  <button type="submit" class="btn btn-lg btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+
+    <script>
+        let loginTitle = document.querySelector('#loginTitle');
+        let btnChgMember = document.querySelector('#btnChgMember');
+        let kindSwitch = document.querySelector('#kindSwitch');
+
+        // s: login member change event
+        btnChgMember.addEventListener('click', ()=>{
+          if(btnChgMember.getAttribute('data-status') === 'member'){
+            btnChgMember.setAttribute('data-status', 'admin');
+          }else if(btnChgMember.getAttribute('data-status') === 'admin'){
+            btnChgMember.setAttribute('data-status', 'member');
+          }
+          switchPage();
+        });
+
+        const switchPage = () =>{
+          switch (btnChgMember.getAttribute('data-status')) {
+            case 'member':
+              btnChgMember.innerText = 'Admin Login';
+              loginTitle.innerText = 'Login';
+              kindSwitch.innerHTML = `
+                <div class="form-switch mt-4 ps-0 text-center">
+                  <span>Instructors</span>
+                  <label>
+                    <input type="checkbox" name="kind" class="form-check-input ms-1 me-1" role="switch" id="flexSwitchCheckDefault"/>
+                  </label>
+                  <span>Member</span>
+                </div> 
+              `
+              break;
+            case 'admin':
+              btnChgMember.innerText = 'Member/ Instructor Login';
+              loginTitle.innerText = 'Admin Login';
+              kindSwitch.innerHTML = '';
+              break;
+          }
+        }
+        switchPage();
+        // e: login status change event
+
+
+        let isMember = true;
+        const phppath = "http://localhost/php/FitnessCMS-FinalProject/login.php";
+        // Using fetch
+        async function postRequest(reqData) {
+            try {
+                const response = await fetch(phppath, {
+                    method: "POST",
+                    body: reqData,
+                });
+                const result = await response.json();
+                console.log("Success:", result.result);
+                if(btnChgMember.getAttribute('data-status') === 'member'){    // Member/instructor
+                  if (isMember) {
+                    sessionStorage.setItem("sid", result.result.sid);
+                    sessionStorage.setItem("mid", result.result.mid);
+                    location.replace("../html/member.html")
+                  } else {
+                    sessionStorage.setItem("sid", result.result.sid);
+                    sessionStorage.setItem("fname", result.result.fname);
+                    console.log('instructor')
+                    location.replace("../html/instructor.html");
+                  } 
+                }
+                else {  // Admin
+                  sessionStorage.setItem("sid", result.result.sid);
+                  sessionStorage.setItem("aid", result.result.aid);
+                  console.log('admin')
+                  location.replace("../html/AdminDashboard.html");
+                }
+            } catch (error) {
+                console.log("Error:", error);
+            }
+        }
+
+        document.querySelector("form").addEventListener("submit", (e) => {
+          e.preventDefault();
+          let reqData = new FormData();
+          if(btnChgMember.getAttribute('data-status') === 'member'){    // Member/Instructor
+            const email = document.querySelectorAll("input")[0].value;
+            const password = document.querySelectorAll("input")[1].value;
+            const kind = document.querySelectorAll("input")[2].checked ? "on" : "off";
+            isMember = kind == "on" ? true : false;
+            reqData.append("email", email);
+            reqData.append("password", password);
+            reqData.append("kind", kind);
+          }else{    // Admin
+            const email = document.querySelectorAll("input")[0].value;
+            const password = document.querySelectorAll("input")[1].value;
+            reqData.append("email", email);
+            reqData.append("password", password);
+          }
+          postRequest(reqData);
+        })
+
+    </script>
+</body>
+
+</html>

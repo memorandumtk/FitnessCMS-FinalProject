@@ -1,0 +1,86 @@
+.header-class {
+    height: 100px;
+    background-color: rgb(65, 65, 248);
+    display: flex;
+    align-items: center;
+}
+
+#welcome-h1{
+    color: white;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+button {
+    border-radius: 20px;
+}
+
+.title-class h1 {
+    margin-left: 200px;
+    margin-top: 25px;
+}
+
+.title-class{
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+.content-container {
+    margin-top: 25px;
+    margin-left: 200px;
+    margin-right: 200px;
+    border-radius: 20px;
+    padding: 50px;
+    height: auto;
+    width: auto;
+    background-color: lightgray;
+}
+
+.table-responsive-sm {
+    margin: auto;
+}
+
+table {
+    margin: auto;
+}
+
+.btn-accept {
+    margin: 10px 0;
+    border-radius: 10px;
+    border-style: none;
+    padding: 10px 25px;
+    background-color: rgb(68, 193, 68);
+    color: white;
+}
+
+.btn-add {
+    /* margin: 10px 0; */
+    border-radius: 10px;
+    border-style: none;
+    padding: 10px 15px;
+    background-color: rgb(80, 80, 248);
+    color: white;
+}
+
+.btn-reject {
+    margin: 10px 10px 0 0;
+    border-radius: 10px;
+    border-style: none;
+    padding: 10px 25px;
+    background-color: rgb(219, 78, 78);
+    color: white;
+}
+
+.btn-create {
+    border-radius: 10px;
+    border-style: none;
+    margin: 35px 20px 35px 50px;
+    padding: 15px;
+    background-color: rgb(138, 56, 244);
+    color: white;
+}
+
+#tf-container {
+    display: flex;
+}
