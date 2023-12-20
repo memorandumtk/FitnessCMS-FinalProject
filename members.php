@@ -50,7 +50,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
                             echo "No instructors.";
                         }
                         // Select query for outputting all of workouts
-                        $sql3 = "SELECT * FROM `workout_tb`";
+                        $sql3 = "SELECT * FROM `workouts_tb`";
                         $stmt3= $conn->prepare($sql3);
                         $stmt3->execute();
                         $result3 = $stmt3->get_result();
@@ -129,6 +129,18 @@ switch($_SERVER["REQUEST_METHOD"]) {
                     } else {
                         $mid = $_POST["mid"];
                         // Getting workout data.
+                        // -
+                        // -
+                        // -
+                        // -
+                        // -
+                        // -
+                        // inner join clause is gonna be here...
+                        // -
+                        // -
+                        // -
+                        // -
+                        // -
                         $output=[];
                         $sql = "SELECT * FROM `workout_tb`";
                         $stmt= $conn->prepare($sql);
@@ -155,7 +167,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
                     // $mid = $_POST["mid"];
                     // Getting workout data.
                     $output=[];
-                    $sql = "SELECT * FROM `workout_tb`";
+                    $sql = "SELECT * FROM `workouts_tb`";
                     $stmt= $conn->prepare($sql);
                     $stmt->execute();
                     $result = $stmt->get_result();
