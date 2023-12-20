@@ -51,6 +51,13 @@
     let pObj = null;
     let fname = sessionStorage.getItem("fname");
 
+    let logoutBtn = document.querySelectorAll("button")[2];
+    logoutBtn.addEventListener("click", ()=>{
+        sessionStorage.removeItem("sid");
+        sessionStorage.removeItem("fname");
+        location.replace("./login.html");
+    });
+
     let reqBtn = document.querySelectorAll("button")[0];
     reqBtn.addEventListener("click", ()=>{
         location.replace("./instructor.html");

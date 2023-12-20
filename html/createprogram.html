@@ -59,6 +59,12 @@
     let program = [];
     let wObj = null;
 
+    let logoutBtn = document.querySelectorAll("button")[2];
+    logoutBtn.addEventListener("click", ()=>{
+        sessionStorage.removeItem("sid");
+        sessionStorage.removeItem("fname");
+        location.replace("./login.html");
+    });
 
 
     const finishCreating=()=>{
