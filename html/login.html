@@ -43,7 +43,10 @@
     </main>
 
 
-    <script>
+    <script type="module">
+        import XMLReq from "../js/XMLReq.js"
+        let xmlReq = new XMLReq("http://localhost/FitnessCMS-FinalProject/login.php");
+
         let loginTitle = document.querySelector('#loginTitle');
         let btnChgMember = document.querySelector('#btnChgMember');
         let kindSwitch = document.querySelector('#kindSwitch');
@@ -85,33 +88,32 @@
 
 
         let isMember = true;
-        const phppath = "http://localhost/php/FitnessCMS-FinalProject/login.php";
+        const phppath = "http://localhost/FitnessCMS-FinalProject/login.php";
         // Using fetch
-        async function postRequest(reqData) {
+        const login =(data)=>{
             try {
-                const response = await fetch(phppath, {
-                    method: "POST",
-                    body: reqData,
-                });
-                const result = await response.json();
-                console.log("Success:", result.result);
+                let result = JSON.parse(data);
+                console.log("Success:", result);
                 if(btnChgMember.getAttribute('data-status') === 'member'){    // Member/instructor
                   if (isMember) {
-                    sessionStorage.setItem("sid", result.result.sid);
-                    sessionStorage.setItem("mid", result.result.mid);
-                    location.replace("../html/member.html")
+                    sessionStorage.setItem("sid", result.sid);
+                    sessionStorage.setItem("id", result.id);   
+                    sessionStorage.setItem("uname", result.uname); 
+                    location.replace("./member.html")
                   } else {
-                    sessionStorage.setItem("sid", result.result.sid);
-                    sessionStorage.setItem("iid", result.result.iid);
+                    sessionStorage.setItem("sid", result.sid);
+                    sessionStorage.setItem("id", result.id);
+                    sessionStorage.setItem("uname", result.uname); 
                     console.log('instructor')
-                    location.replace("../html/instructor.html");
+                    location.replace("./instructor.html");
                   } 
                 }
                 else {  // Admin
-                  sessionStorage.setItem("sid", result.result.sid);
-                  sessionStorage.setItem("aid", result.result.aid);
+                  sessionStorage.setItem("sid", result.sid);
+                  sessionStorage.setItem("id", result.id);
+                  sessionStorage.setItem("uname", result.uname); 
                   console.log('admin')
-                  location.replace("../html/AdminDashboard.html");
+                  location.replace("./AdminDashboard.html");
                 }
             } catch (error) {
                 console.log("Error:", error);
@@ -135,7 +137,10 @@
             reqData.append("email", email);
             reqData.append("password", password);
           }
-          postRequest(reqData);
+          xmlReq.Post(reqData).then(
+            login,
+            (rej)=>console.log(rej)
+          )
         })
 
     </script>
