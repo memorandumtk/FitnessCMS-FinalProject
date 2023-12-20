@@ -85,7 +85,7 @@
 
 
         let isMember = true;
-        const phppath = "http://localhost/php/FitnessCMS-FinalProject/login.php";
+        const phppath = "http://localhost/FitnessCMS-FinalProject/login.php";
         // Using fetch
         async function postRequest(reqData) {
             try {
@@ -99,19 +99,19 @@
                   if (isMember) {
                     sessionStorage.setItem("sid", result.result.sid);
                     sessionStorage.setItem("mid", result.result.mid);
-                    location.replace("../html/member.html")
+                    location.replace("./member/member.html")
                   } else {
                     sessionStorage.setItem("sid", result.result.sid);
                     sessionStorage.setItem("iid", result.result.iid);
                     console.log('instructor')
-                    location.replace("../html/instructor.html");
+                    location.replace("./instructor/instructor.html");
                   } 
                 }
                 else {  // Admin
                   sessionStorage.setItem("sid", result.result.sid);
                   sessionStorage.setItem("aid", result.result.aid);
                   console.log('admin')
-                  location.replace("../html/AdminDashboard.html");
+                  location.replace("./admin/AdminDashboard.html");
                 }
             } catch (error) {
                 console.log("Error:", error);
