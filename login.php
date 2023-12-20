@@ -50,14 +50,14 @@ switch($_SERVER["REQUEST_METHOD"]) {
                     }
                 }
                 if ($output==[]) {
-                    echo ("user not found");
+                    echo json_encode("user not found");
                 }
             } else {
-                echo ("no user data");
+                echo json_encode("no user data");
             }
         }
         break;
     default:
-        echo ("it is not post.");
+        echo json_encode("it is not post.");
         break;
 }
