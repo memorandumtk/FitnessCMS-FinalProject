@@ -16,9 +16,8 @@
     </div>
     <div class="header-button-container">
         <button type="button" class="btn btn-danger">Logout</button>
-        
     </div>
-</div>
+  </div>
   <div class="wrapper">
     <h1>Register a member</h1>
     <div class="form">
@@ -43,50 +42,49 @@
         <div class="thirdrow">
           <p>Gender</p>
           <input type="radio" name="gen" id="gen_a" value="M" checked>
-      <label for="gen_a">Men</label>
-      <input type="radio" name="gen" id="gen_b" value="W">
-      <label for="gen_b">Women</label>
-      <input type="radio" name="gen" id="gen_o" value="O">
-      <label for="gen_o">Other</label>
-      </div>
-      <div class="fourthrow">
-        <label for="email">email</label>
-        <div class="emailinp"><input type="email" id="email" placeholder="email" name="email" required></div>
-      </div>
-      <div class="fifthrow">
-        <label for="password">password</label>
-        <div class="passwordinp"><input type="password" id="password" placeholder="password" name="pass" required></div>
-      </div>
-      <div class="reg"><button type="submit">Register</button></div>
+          <label for="gen_a">Men</label>
+          <input type="radio" name="gen" id="gen_b" value="W">
+          <label for="gen_b">Women</label>
+          <input type="radio" name="gen" id="gen_o" value="O">
+          <label for="gen_o">Other</label>
+        </div>
+        <div class="fourthrow">
+          <label for="email">email</label>
+          <div class="emailinp"><input type="email" id="email" placeholder="email" name="email" required></div>
+        </div>
+        <div class="fifthrow">
+          <label for="password">password</label>
+          <div class="passwordinp"><input type="password" id="password" placeholder="password" name="pass" required></div>
+        </div>
+        <div class="reg"><button type="submit">Register</button></div>
       </form>
     </div>
-
-
-      </div>
-    
-  
+  </div>
 </body>
+
 <script type="module">
   import XMLReq from "../js/XMLReq.js"
   let xmlReq = new XMLReq("http://localhost/FitnessCMS-FinalProject/member.php");
   let btn = document.querySelectorAll("button")[0];
-   btn.addEventListener("click",()=>{
-        sessionStorage.removeItem("uname");
-        location.replace("../login.html");
-    });
-  document.querySelector("#welcome-h1").innerText += ` ${sessionStorage.getItem("uname")}`;
+  btn.addEventListener("click",()=>{
+      sessionStorage.removeItem("sid");
+      sessionStorage.removeItem("id");
+      sessionStorage.removeItem("fname");
+      location.replace("../login.html");
+  });
+  document.querySelector("#welcome-h1").innerText += ` ${sessionStorage.getItem("fname")}`;
   const change = (data)=>{
     console.log(data);
     location.replace("./AdminDashboard.html");
   }
   document.querySelector("form").addEventListener("submit",(e)=>{
-      e.preventDefault();
-      let reqData = new FormData(e.target);
-      reqData.append("req","mreg");
-      xmlReq.Post(reqData).then(
-         change,
-         (rej)=>console.log(rej)
-      )
-   })
+    e.preventDefault();
+    let reqData = new FormData(e.target);
+    reqData.append("req","mreg");
+    xmlReq.Post(reqData).then(
+        change,
+        (rej)=>console.log(rej)
+    )
+  })
 </script>
 </html>
