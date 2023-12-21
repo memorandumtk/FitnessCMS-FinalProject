@@ -289,8 +289,8 @@
                 (data) => {
                     console.log(JSON.parse(data));
                     let pending = JSON.parse(data);
-                    let tr = document.createElement("tr");
                     for (let p of pending) {
+                        let tr = document.createElement("tr");
                         for (let key in p) {
                             if (key == "reqid" || key == "instructor" || key == "goal") {
                                 let td = document.createElement("td");
