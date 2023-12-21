@@ -299,7 +299,7 @@
             xmlReq.Post(reqData).then(
                 (data) => {
                     // This data should be array.
-                    myWorkoutData = JSON.parse(data);
+                    workoutCardPopper(JSON.parse(data));
                 },
                 (rej) => {
                     console.log(rej);
@@ -345,8 +345,7 @@
                     workoutRequestPopper(e);
                 })
             } else {
-                getMyWorkoutData();
-                workoutCardPopper(myWorkoutData);
+                myWorkoutData = getMyWorkoutData();
                 isMessageFromInstructor = true;
                 messageFromInstructorPopper();
                 h3title.children[0].textContent = "My";
