@@ -50,21 +50,21 @@ switch($_SERVER["REQUEST_METHOD"]) {
                             echo "No instructors.";
                         }
                         // Select query for outputting all of workouts
-                        $sql3 = "SELECT * FROM `workouts_tb`";
+                        $sql3 = "SELECT * FROM `programs_tb` WHERE `mid` = ?";
                         $stmt3= $conn->prepare($sql3);
+                        $stmt3->bind_param("i", $mid);
                         $stmt3->execute();
                         $result3 = $stmt3->get_result();
                         $stmt3->close();
-                        $workouts = [];
+                        $isRequest;
                         if($result3->num_rows>0) {
-                            while($row = $result3->fetch_assoc()) {
-                                array_push($workouts, $row);
-                            }
-                            array_push($output, $workouts);
-                            echo json_encode($output);
+                            $isRequest["request"] = true;
+                            array_push($output, $isRequest);
                         } else {
-                            echo "No workouts.";
+                            $isRequest["request"] = false;
+                            array_push($output, $isRequest);
                         }
+                        echo json_encode($output);
                     }
                 } else {
                     echo "Menber's id is not set.";
@@ -81,44 +81,30 @@ switch($_SERVER["REQUEST_METHOD"]) {
                         $goal = $_POST["goal"];
                         $note = $_POST["note"];
                         $mid = $_POST["mid"];
-                        $status = $_POST["status"];
                         $ifname = $_POST["instructors"];
-                        /* create a prepared statement for UPDATE*/
-                        // Ref https://phpdelusions.net/mysqli_examples/update
-                        // We don't have to  confirm result by update clause.
-                        $sql = "UPDATE `member_tb` SET `status` = ?, `level` = ?, `days` = ?, `goal` = ?, `note` = ?, `ifname` = ? WHERE `member_tb`.`mid` = ?";
-                        $stmt= $conn->prepare($sql);
-                        $stmt->bind_param("ssisssi", $status, $level, $days, $goal, $note, $ifname, $mid);
-                        $stmt->execute();
-                        // Below is for passing user information using SELECT
-                        $output=[];
+                        // Search the member based on mid to get fname and lname of the member.
                         $sql = "SELECT * FROM `member_tb` WHERE `member_tb`.`mid` = ?";
                         $stmt= $conn->prepare($sql);
                         $stmt->bind_param("i", $mid);
                         $stmt->execute();
                         $result = $stmt->get_result();
                         $stmt->close();
-                        if($result->num_rows===1) {
-                            $output = $result->fetch_assoc();
+                        if($result->num_rows === 1) {
+                            $member = $result->fetch_assoc();
+                            echo json_encode($member);
                         } else {
-                            echo "No such a member.";
+                            echo "Can't find the user.";
                         }
-                        // for searching instructor's information entered in request form.
-                        $sql2 = "SELECT * FROM `instructor_tb` WHERE `fname` = ?";
+                        // Insert to requests table based on the value of form.
+                        $sql2 = "INSERT INTO `requests_tb`(`memid`, `memfname`, `memlname`, `dlevel`, `dpw`, `instructor`, `goal`, `notes`)
+                        VALUES (?,?,?,?,?,?,?,?)";
                         $stmt2= $conn->prepare($sql2);
-                        $stmt2->bind_param("s", $ifname);
+                        $stmt2->bind_param("isssisss", $mid, $member["fname"], $member["lname"], $level, $days, $ifname, $goal, $note);
                         $stmt2->execute();
-                        $result2 = $stmt2->get_result();
                         $stmt2->close();
-                        if($result2->num_rows===1) {
-                            array_push($output, $result2->fetch_assoc());
-                            echo json_encode($output);
-                        } else {
-                            echo "No such a instructor.";
-                        }
                     }
                 } else {
-                    echo "This is invalid post request.";
+                    echo "Menber's id is not set.";
                 }
                 break;
 
@@ -128,22 +114,11 @@ switch($_SERVER["REQUEST_METHOD"]) {
                         echo("DB connection error ".$conn->connect_error);
                     } else {
                         $mid = $_POST["mid"];
-                        // Getting workout data.
-                        // -
-                        // -
-                        // -
-                        // -
-                        // -
-                        // -
-                        // inner join clause is gonna be here...
-                        // -
-                        // -
-                        // -
-                        // -
-                        // -
                         $output=[];
-                        $sql = "SELECT * FROM `programs_tb`";
+                        // Select from programs table based on mid.
+                        $sql = "SELECT * FROM `programs_tb` INNER JOIN `workouts_tb` ON programs_tb.wid = workouts_tb.wid WHERE programs_tb.mid = ?";
                         $stmt= $conn->prepare($sql);
+                        $stmt->bind_param("i", $mid);
                         $stmt->execute();
                         $result = $stmt->get_result();
                         $stmt->close();
@@ -153,13 +128,14 @@ switch($_SERVER["REQUEST_METHOD"]) {
                             }
                             echo json_encode($output);
                         } else {
-                            echo "No workout data.";
+                            echo false;
                         }
                     }
                 } else {
-                    echo "This is invalid post request.";
+                    echo "Menber's id is not set.";
                 }
                 break;
+
             case "get-all-workouts":
                 if ($conn->connect_error) {
                     echo("DB connection error ".$conn->connect_error);
@@ -181,6 +157,33 @@ switch($_SERVER["REQUEST_METHOD"]) {
                     }
                 }
                 break;
+
+            case "get-my-requests":
+                if (isset($_POST["mid"])) {
+                    if ($conn->connect_error) {
+                        echo("DB connection error ".$conn->connect_error);
+                    } else {
+                        // Getting requests data based on member id.
+                        $output=[];
+                        $mid = $_POST["mid"];
+                        $sql = "SELECT * FROM `requests_tb` WHERE `memid` = ?";
+                        $stmt= $conn->prepare($sql);
+                        $stmt->bind_param("i", $mid);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                        $stmt->close();
+                        if($result->num_rows > 0) {
+                            while($row = $result->fetch_assoc()) {
+                                array_push($output, $row);
+                            }
+                            echo json_encode($output);
+                        } else {
+                            echo "You haven't sent requests yet.";
+                        }
+                    }
+                }
+                break;
+                
             default:
                 echo "'mode' of post request is not set.";
                 break;

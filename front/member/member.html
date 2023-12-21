@@ -21,38 +21,6 @@
         .nonactive {
             display: none;
         }
-
-        .card-title {
-            font-weight: 700;
-        }
-
-        .card-text {
-            font-size: 0.8rem;
-        }
-
-        .sets-unit,
-        .reps-unit {
-            font-size: 0.8rem;
-        }
-
-        .type-img {
-            width: 32px;
-            height: 32px;
-        }
-
-        .reps,
-        .sets {
-            font-weight: 500;
-        }
-
-        .form-label,
-        legend {
-            font-size: 1.2rem;
-        }
-
-        .form-check-label {
-            font-weight: 500;
-        }
     </style>
 </head>
 
@@ -67,19 +35,14 @@
         </div>
     </div>
 
-    <main class="container-md p-4">
+    <main class="container-md p-4 d-flex flex-column gap-4">
         <h3>
             <span></span> Workout Program
         </h3>
         <div class="message-from-instructor nonactive">
             <p>
                 Your workouot program curated by your instructor:
-                <span>[insructor's name]</span>
-            </p>
-            <h5>
-                Instructor notes:
-            </h5>
-            <p>
+                <span id="instructors-name"></span>
             </p>
         </div>
 
@@ -89,9 +52,24 @@
             </div>
 
             <div class="workout-form-div">
-                <div class="workout-form-message">
+                <div class="workout-form-message d-flex flex-column gap-4">
                     <!-- If workout form hasn't been submitted, messages go here. -->
+                    <div class="pending-request-div table-responsive-md nonactive">
+                        <h5>
+                            Pending Requests
+                        </h5>
+                        <table class="pending-request table table-bordered">
+                            <thead class="table-success">
+                                <tr>
+                                    <th scope="col">Request ID</th>
+                                    <th scope="col">Instructor</th>
+                                    <th scope="col">Your Goal</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
+
                 <form class="workout-form nonactive">
                     <fieldset>
                         <legend>1. Which difficulty level would you like to choose?</legend>
@@ -189,6 +167,9 @@
         let messageFromInstructor = document.querySelector(".message-from-instructor");
         let h3title = document.querySelector("main h3");
         let isMessageFromInstructor = false;
+        let isProgram = false;
+        let pendingRequestDiv = document.querySelector(".pending-request-div");
+        let pendingRequestTable = document.querySelector(".pending-request");
 
         // Function making request form visible
         // and putting instructors' name to option input.
@@ -207,21 +188,6 @@
             });
         }
 
-        // Function displaying "messages" from instructor.
-        const messageFromInstructorPopper = () => {
-            if (messageFromInstructor.classList.contains("nonactive")
-                && isMessageFromInstructor) {
-                messageFromInstructor.classList.remove("nonactive")
-                messageFromInstructor.classList.add("active")
-            } else {
-                messageFromInstructor.classList.remove("active")
-                messageFromInstructor.classList.add("nonactive")
-            }
-            let span = document.querySelector(".message-from-instructor p span");
-            span.textContent = memberInfo.ifname;
-            let notes = document.querySelectorAll(".message-from-instructor p")[1];
-            notes.textContent = memberInfo.note;
-        }
 
         // Function displaying "cards" of workouts.
         const workoutCardPopper = (data) => {
@@ -229,7 +195,7 @@
             let cardsField = document.createElement("div");
             cardsField.classList.add("row");
             cardsField.classList.add("row-cols-2");
-            cardsField.classList.add("row-cols-md-4");
+            cardsField.classList.add("row-cols-lg-3");
             // cardsField.classList.add("row-cols-md-4");
             cardsField.classList.add("g-2");
             data.map((workout, key) => {
@@ -243,28 +209,22 @@
                 image.alt = 'Image of ' + workout.wname;
 
                 let description = document.createElement("div");
-                description.classList.add("d-flex", "justify-content-between", "px-2", "align-items-center");
-                let smallDiv = document.createElement("div");
-                smallDiv.classList.add("d-flex", "flex-column");
+                description.classList.add("d-flex", "justify-content-evenly", "px-2", "align-items-center");
                 let title = document.createElement("span");
                 title.classList.add("card-title");
                 title.textContent = workout.wname;
-                let target = document.createElement("span");
-                target.classList.add("card-text");
-                target.textContent = workout.target;
-                let type = document.createElement("img");
-                type.classList.add("type-img");
-                type.src = '../../assets/type/' + workout.type + '.svg';
-                type.alt = 'Svg image of ' + workout.type;
-                smallDiv.append(title, target);
-                description.append(smallDiv, type);
+                let typeImg = document.createElement("img");
+                typeImg.classList.add("type-img");
+                typeImg.src = '../../assets/type/' + workout.type + '.svg';
+                typeImg.alt = 'Svg image of ' + workout.type;
+                description.append(title, typeImg);
 
                 let setsReps = document.createElement("div");
                 setsReps.classList.add("d-flex", "justify-content-around", "align-items-center");
                 let setsDiv = document.createElement("div");
                 setsDiv.classList.add("d-flex", "flex-column", "justify-content-evenly", "align-items-center");
                 let sets = document.createElement("span");
-                sets.textContent = workout.reps;
+                sets.textContent = workout.sets;
                 sets.classList.add("sets");
                 let setsText = document.createElement("span");
                 setsText.textContent = "sets";
@@ -280,7 +240,7 @@
                 repsText.classList.add("reps-unit");
                 repsDiv.append(reps, repsText);
                 let targetImage = document.createElement("span");
-                targetImage.textContent = workout.target;
+                targetImage.textContent = workout.mtarget;
                 setsReps.append(setsDiv, repsDiv, targetImage);
 
                 card.append(image, description, setsReps);
@@ -290,16 +250,84 @@
             workoutCardDiv.append(cardsField);
         }
 
+        // Function displaying pending-request-div.
+        const pendingRequestPopper = () => {
+            if (pendingRequestDiv.classList.contains("nonactive")
+                && !isProgram) {
+                pendingRequestDiv.classList.remove("nonactive")
+                pendingRequestDiv.classList.add("active")
+            } else {
+                pendingRequestDiv.classList.remove("active")
+                pendingRequestDiv.classList.add("nonactive")
+            }
+        }
+
+        const requestButtonPopper = () => {
+            let message = document.createElement("h2");
+            message.textContent = "You don't have a workout program yet";
+            let requestBtn = document.createElement("button");
+            requestBtn.type = "button";
+            requestBtn.textContent = "Request Workout";
+            requestBtn.classList.add("btn", "btn-success");
+            messageBtnDiv.classList.add("d-flex", "flex-column", "justify-content-center", "align-items-center");
+            messageBtnDiv.prepend(message, requestBtn);
+            workoutDiv.classList.add("rounded-4", "bg-light", "d-flex", "flex-column", "justify-content-center", "align-items-center", "p-4")
+            requestBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                workoutRequestPopper(e);
+            })
+        }
+
+        const displayPendingRequest = () => {
+            let reqData = new FormData();
+            const mid = sessionStorage.getItem("id");
+            reqData.append("mid", mid);
+            reqData.append("mode", "get-my-requests");
+            let requestTbody = document.createElement("tbody");
+            xmlReq.Post(reqData).then(
+                (data) => {
+                    console.log(JSON.parse(data));
+                    let pending = JSON.parse(data);
+                    let tr = document.createElement("tr");
+                    for (let p of pending) {
+                        for (let key in p) {
+                            if (key == "reqid" || key == "instructor" || key == "goal") {
+                                let td = document.createElement("td");
+                                td.textContent = p[key];
+                                tr.append(td);
+                            }
+                        }
+                        requestTbody.append(tr);
+                    }
+                    pendingRequestTable.append(requestTbody);
+                    pendingRequestPopper();
+                },
+                (rej) => {
+                    console.log(rej);
+                }
+            )
+
+        }
+
         // Function to get myworkout data.
         const getMyWorkoutData = () => {
             let reqData = new FormData();
-            const mid = sessionStorage.getItem("mid");
+            const mid = sessionStorage.getItem("id");
             reqData.append("mid", mid);
             reqData.append("mode", "get-my-workouts");
             xmlReq.Post(reqData).then(
                 (data) => {
-                    // This data should be array.
-                    workoutCardPopper(JSON.parse(data));
+                    if (!data) {
+                        requestButtonPopper();
+                    } else {
+                        myWorkoutData = JSON.parse(data);
+                        workoutCardPopper(JSON.parse(data));
+                        isMessageFromInstructor = true;
+                        let ifnameh4 = document.querySelector("#instructors-name");
+                        ifnameh4.textContent = myWorkoutData[0].ifname;
+                        h3title.children[0].textContent = "My";
+                        pendingRequestPopper();
+                    }
                 },
                 (rej) => {
                     console.log(rej);
@@ -313,8 +341,11 @@
             reqData.append("mode", "get-all-workouts");
             xmlReq.Post(reqData).then(
                 (data) => {
-                    // This data should be array.
                     allWorkoutData = JSON.parse(data);
+                    workoutCardPopper(allWorkoutData);
+                    isMessageFromInstructor = false;
+                    h3title.children[0].textContent = "All";
+                    pendingRequestPopper();
                 },
                 (rej) => {
                     console.log(rej);
@@ -325,30 +356,13 @@
         // Function producing button taking user to seeing form 
         // or producing workout cards.
         const workoutHandler = () => {
-            // below condition is for test
-            // if (memberInfo.status===null) {
-            // if (memberInfo.status === null || memberInfo.status == "pending") {
-            if (memberInfo.status === null || memberInfo.status == "pending") {
-                let message = document.createElement("h2");
-                message.textContent = "You don't have a workout program yet";
-                let requestBtn = document.createElement("button");
-                requestBtn.type = "button";
-                requestBtn.textContent = "Request Workout";
-                requestBtn.classList.add("btn", "btn-success");
-
-                messageBtnDiv.classList.add("d-flex", "flex-column", "justify-content-center", "align-items-center");
-                messageBtnDiv.append(message, requestBtn);
-
-                workoutDiv.classList.add("rounded-4", "bg-light", "d-flex", "flex-column", "justify-content-center", "align-items-center", "p-4")
-                requestBtn.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    workoutRequestPopper(e);
-                })
+            if (!isProgram) {
+                requestButtonPopper();
+                displayPendingRequest();
+                pendingRequestPopper();
             } else {
-                myWorkoutData = getMyWorkoutData();
-                isMessageFromInstructor = true;
-                messageFromInstructorPopper();
-                h3title.children[0].textContent = "My";
+                getMyWorkoutData();
+                pendingRequestPopper();
             }
         }
 
@@ -372,11 +386,6 @@
             formInvisible();
             removeCards();
             getAllWorkoutData();
-            workoutCardPopper(allWorkoutData);
-            isMessageFromInstructor = false;
-            messageFromInstructorPopper();
-            h3title.children[0].textContent = "All";
-
         });
 
         // Add eventlistener to dispaly my workouts
@@ -385,10 +394,6 @@
             formInvisible();
             removeCards();
             getMyWorkoutData();
-            workoutCardPopper(myWorkoutData);
-            isMessageFromInstructor = true;
-            messageFromInstructorPopper();
-            h3title.children[0].textContent = "My";
         });
 
 
@@ -405,12 +410,11 @@
         requestForm.addEventListener("submit", (e) => {
             e.preventDefault();
             const sid = sessionStorage.getItem("sid");
-            const mid = sessionStorage.getItem("mid");
+            const mid = sessionStorage.getItem("id");
             let reqData = new FormData(e.target);
             reqData.append("sid", sid);
             reqData.append("mid", mid);
             // After submitting form of workout request.
-            reqData.append("status", "pending")
             reqData.append("mode", "form")
             xmlReq.Post(reqData).then(
                 (data) => {
@@ -426,8 +430,8 @@
 
         function load() {
             const sid = sessionStorage.getItem("sid");
-            const mid = sessionStorage.getItem("mid");
-            if(mid===null)location.replace("../login.html");
+            const mid = sessionStorage.getItem("id");
+            if (mid === null) location.replace("../login.html");
             let reqData = new FormData();
             reqData.append("sid", sid);
             reqData.append("mid", mid);
@@ -438,7 +442,7 @@
                     console.log(loadData);
                     memberInfo = loadData[0];
                     Instructors = loadData[1];
-                    allWorkoutData = loadData[2];
+                    isProgram = loadData[2].request;
                     // Welcome message
                     let h1 = document.querySelector("#welcome-h1");
                     h1.textContent = "Welcome " + memberInfo.fname + "!";

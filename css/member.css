@@ -1,30 +1,66 @@
 .header-class {
-    height: 100px;
-    background-color: rgb(65, 65, 248);
-    display: flex;
-    align-items: center;
+  height: 100px;
+  background-color: rgb(65, 65, 248);
+  display: flex;
+  align-items: center;
 }
 
-#welcome-h1{
-    color: white;
-    margin-left: 50px;
-    margin-right: 50px;
+#welcome-h1 {
+  color: white;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 button {
-    border-radius: 20px;
+  border-radius: 20px;
 }
 
 .title-class h1 {
-    margin-left: 100px;
+  margin-left: 100px;
 }
 
-.title-class{
-    height: 100px;
-    display: flex;
-    align-items: center;
+.title-class {
+  height: 100px;
+  display: flex;
+  align-items: center;
 }
 
 table {
-    margin: auto;
+  margin: auto;
+}
+
+.card-title {
+  font-weight: 700;
+}
+
+.card-text {
+  font-size: 0.8rem;
+}
+
+.sets-unit,
+.reps-unit {
+  font-size: 0.8rem;
+}
+
+.type-img {
+  width: 32px;
+  height: 32px;
+}
+
+.reps,
+.sets {
+  font-weight: 500;
+}
+
+.form-label,
+legend {
+  font-size: 1.2rem;
+}
+
+.form-check-label {
+  font-weight: 500;
+}
+#instructors-name {
+  font-weight: 600;
+  font-size: 1.2rem;
 }
