@@ -105,7 +105,7 @@
   const table =(data)=>{
     if(sessionStorage.getItem("sid") != "undefined"){
       console.log(sessionStorage.getItem("sid"));
-      document.querySelector("#welcome-h1").innerText += ` ${sessionStorage.getItem("uname")}`;
+      document.querySelector("#welcome-h1").innerText += ` ${sessionStorage.getItem("fname")}`;
       let newArr = JSON.parse(data)
       let member = newArr[0];
       let instructor = newArr[1];
