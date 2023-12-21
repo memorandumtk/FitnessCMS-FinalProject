@@ -50,7 +50,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
                             echo "No instructors.";
                         }
                         // Select query for outputting all of workouts
-                        $sql3 = "SELECT * FROM `workout_tb`";
+                        $sql3 = "SELECT * FROM `workouts_tb`";
                         $stmt3= $conn->prepare($sql3);
                         $stmt3->execute();
                         $result3 = $stmt3->get_result();
@@ -67,7 +67,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
                         }
                     }
                 } else {
-                    echo "Menber's id is not set.";
+                    echo "Member's id is not set.";
                 }
                 break;
 
@@ -129,8 +129,20 @@ switch($_SERVER["REQUEST_METHOD"]) {
                     } else {
                         $mid = $_POST["mid"];
                         // Getting workout data.
+                        // -
+                        // -
+                        // -
+                        // -
+                        // -
+                        // -
+                        // inner join clause is gonna be here...
+                        // -
+                        // -
+                        // -
+                        // -
+                        // -
                         $output=[];
-                        $sql = "SELECT * FROM `workout_tb`";
+                        $sql = "SELECT * FROM `programs_tb`";
                         $stmt= $conn->prepare($sql);
                         $stmt->execute();
                         $result = $stmt->get_result();
@@ -152,10 +164,9 @@ switch($_SERVER["REQUEST_METHOD"]) {
                 if ($conn->connect_error) {
                     echo("DB connection error ".$conn->connect_error);
                 } else {
-                    // $mid = $_POST["mid"];
-                    // Getting workout data.
+                    // Getting workout data from workouts table.
                     $output=[];
-                    $sql = "SELECT * FROM `workout_tb`";
+                    $sql = "SELECT * FROM `workouts_tb`";
                     $stmt= $conn->prepare($sql);
                     $stmt->execute();
                     $result = $stmt->get_result();

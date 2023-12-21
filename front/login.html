@@ -99,20 +99,20 @@
                   if (isMember) {
                     sessionStorage.setItem("sid", result.sid);
                     sessionStorage.setItem("id", result.id);   
-                    sessionStorage.setItem("uname", result.uname); 
+                    sessionStorage.setItem("fname", result.uname); 
                     location.replace("./member/member.html")
                   } else {
                     sessionStorage.setItem("sid", result.sid);
                     sessionStorage.setItem("id", result.id);
-                    sessionStorage.setItem("uname", result.uname); 
+                    sessionStorage.setItem("fname", result.uname); 
                     console.log('instructor')
-                    location.replace("../instructor.html");
+                    location.replace("./instructor/instructor.html");
                   } 
                 }
                 else {  // Admin
                   sessionStorage.setItem("sid", result.sid);
                   sessionStorage.setItem("id", result.id);
-                  sessionStorage.setItem("uname", result.uname); 
+                  sessionStorage.setItem("fname", result.uname); 
                   console.log('admin')
                   location.replace("./admin/AdminDashboard.html");
                 }

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Dashboard</title>
+    <link rel="stylesheet" href="../../css/instructor.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="header-container" class="header-class container-fluid">
+        <img src="../../assets/orcalogo.png" height="100" style="margin-left: 50px">
+        <h1 id="welcome-h1">Welcome Instructor</h1>
+        <nav class="header-button-container">
+            <button type="button" class="btn btn-light">My Requests</button>
+            <button type="button" class="btn btn-light">Active Programs</button>
+            <button type="button" class="btn btn-danger">Logout</button>
+        </nav>
+    </div>
+    <div id="title-container" class="title-class">
+        <h1>My Active Programs</h1>
+    </div>
+    <div class="content-container">
+        <div class="table-responsive-sm container-fluid">
+            <table class="table table-primary table-responsive-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Program ID</th>
+                        <th scope="col">Member ID</th>
+                        <th scope="col">Member Name</th>
+                        <th scope="col">Instructor</th>
+                        <th scope="col">Workout ID</th>
+                        <th scope="col">Instructor Notes</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody class="table-light">
+                    <!-- Here goes the table contents -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+<script type="module">
+    import XMLReq from "../js/XMLReq.js";
+    import program from "../js/programClass.js";
+
+    let xmlReq = new XMLReq("http://localhost/FitnessCMS-FinalProject/instructor.php");
+    let pList = [];
+    let pObj = null;
+    let fname = sessionStorage.getItem("fname");
+
+    let logoutBtn = document.querySelectorAll("button")[2];
+    logoutBtn.addEventListener("click", ()=>{
+        sessionStorage.removeItem("sid");
+        sessionStorage.removeItem("fname");
+        sessionStorage.removeItem("mname");
+        sessionStorage.removeItem("memid");
+        location.replace("../login.html");
+    });
+
+    let reqBtn = document.querySelectorAll("button")[0];
+    reqBtn.addEventListener("click", ()=>{
+        location.replace("../instructor/instructor.html");
+    })
+
+    const tablePoper=()=>{
+        const tbody = document.querySelector("tbody");
+        // console.log(reqList);
+        for (let prog of pList) {
+            tbody.append(prog.toRow())
+        };
+    };
+
+    const loadData=(data)=>{
+        let wprograms = (JSON.parse(data));
+        for(let prog of wprograms) {
+            pObj = new program(prog.pid, prog.mid, prog.mfname, prog.ifname, prog.wid, prog.inote);
+            pList.push(pObj);
+        };
+        tablePoper();
+    };
+
+    const load =()=>{
+        let reqData = new FormData();   
+        reqData.append("mode", "load-programs");
+        reqData.append("fname", fname);
+        xmlReq.Post(reqData).then(
+            loadData,
+            (rej)=>console.log(rej)
+        )
+    }
+    load();
+</script>
+</html>
