@@ -8,12 +8,13 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <title>Orca_Member</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../instructor.css">
+    <link rel="stylesheet" href="../instructor.html">
+    <link rel="stylesheet" href="../css/instructor.css">
 </head>
 
 <body>
     <div id="header-container" class="header-class container-fluid">
-      <img src="../orcalogo.png" height="100" style="margin-left: 50px">
+      <img src="../assets/orcalogo.png" height="100" style="margin-left: 50px">
       <h1 id="welcome-h1">Orca Fitness</h1>
       <div class="header-button-container">
         <button type="button" class="btn btn-light" id="btnChgMember" data-status="member"></button>
@@ -44,7 +45,7 @@
 
 
     <script type="module">
-        import XMLReq from "../js/XMLReq.js"
+        import XMLReq from "../front/js/XMLReq.js"
         let xmlReq = new XMLReq("http://localhost/FitnessCMS-FinalProject/login.php");
 
         let loginTitle = document.querySelector('#loginTitle');
@@ -99,13 +100,13 @@
                     sessionStorage.setItem("sid", result.sid);
                     sessionStorage.setItem("id", result.id);   
                     sessionStorage.setItem("uname", result.uname); 
-                    location.replace("./member.html")
+                    location.replace("./member/member.html")
                   } else {
                     sessionStorage.setItem("sid", result.sid);
                     sessionStorage.setItem("id", result.id);
                     sessionStorage.setItem("uname", result.uname); 
                     console.log('instructor')
-                    location.replace("./instructor.html");
+                    location.replace("../instructor.html");
                   } 
                 }
                 else {  // Admin
@@ -113,7 +114,7 @@
                   sessionStorage.setItem("id", result.id);
                   sessionStorage.setItem("uname", result.uname); 
                   console.log('admin')
-                  location.replace("./AdminDashboard.html");
+                  location.replace("./admin/AdminDashboard.html");
                 }
             } catch (error) {
                 console.log("Error:", error);

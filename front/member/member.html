@@ -12,7 +12,7 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link href="./member.css" rel="stylesheet">
+    <link href="../../css/member.css" rel="stylesheet">
     <title>Orca_Member</title>
     <style>
         .active {
@@ -59,7 +59,7 @@
 
 <body>
     <div id="header-container" class="header-class container-fluid">
-        <img src="../orcalogo.png" height="100" style="margin-left: 50px">
+        <img src="../../assets/orcalogo.png" height="100" style="margin-left: 50px">
         <h1 id="welcome-h1"></h1>
         <div class="header-button-container">
             <button type="button" class="btn btn-light">All Workouts</button>
@@ -173,8 +173,8 @@
 
 
     <script type="module">
-        import XMLReq from "./js/XMLReq.js"
-        const memberPhp = "http://localhost/php/FitnessCMS-FinalProject/members.php";
+        import XMLReq from "../js/XMLReq.js"
+        const memberPhp = "http://localhost/FitnessCMS-FinalProject/members.php";
         let xmlReq = new XMLReq(memberPhp);
         let loadData, memberInfo, Instructors;
         let myWorkoutData = [];
