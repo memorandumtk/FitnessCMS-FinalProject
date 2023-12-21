@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div id="header-container" class="header-class">
+    <div class="headerleft">
+      <img src="../assets/orcalogo.png" height="100" style="margin-left: 50px" alt="">
+      <h1 id="welcome-h1">Welcome</h1>
+    </div>
+    <div class="header-button-container">
+        <button type="button" class="btn btn-danger">Logout</button>
+    </div>
+</div>
+  <div class="contain">
+    <div class="title">
+      <h1>Adimn DashBoard</h1>
+      <button type="button"><a href="./iregister.html">Add Instructor</a></button>
+      <button type="button"><a href="./mregister.html">Add Member</a></button>
+    </div>
+    <div class="table">
+      <div class="list-table">
+        <h2>All Members</h2>
+        <table class="table-bordered">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Gender</th>
+              <th>Email</th>
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="list-table">
+        <h2>All Instructors</h2>
+        <table class="table-bordered">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Gender</th>
+              <th>Email</th>
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script type="module">
+  import XMLReq from "../js/XMLReq.js";
+  let xmlReq = new XMLReq("http://localhost/php/FitnessCMS-FinalProject/admin.php");
+
+  let btn = document.querySelectorAll("button")[0];
+  btn.addEventListener("click",()=>{
+    sessionStorage.removeItem("sid");
+    sessionStorage.removeItem("id");
+    sessionStorage.removeItem("uname");
+    location.replace("./login.html");
+  });
+
+  const mdeleteHandler =(pr)=>{
+    console.log(pr);
+    let mdelete = pr;
+    let reqData = new FormData();
+    reqData.append("req", "mdel");
+    reqData.append("mdel",JSON.stringify(mdelete));
+    xmlReq.Post(reqData).then(
+      (data)=>console.log(data),
+      (rej) => console.log(rej)
+    )
+    location.reload(true);
+  }
+
+  const ideleteHandler =(pr)=>{
+    console.log(pr);
+    let idelete = pr;
+    let reqData = new FormData();
+    reqData.append("req", "idel");
+    reqData.append("idel",JSON.stringify(idelete));
+    xmlReq.Post(reqData).then(
+      (data)=>console.log(data),
+      (rej) => console.log(rej)
+    )
+    location.reload(true);
+  }
+
+  const table =(data)=>{
+    if(sessionStorage.getItem("sid") != "undefined"){
+      console.log(sessionStorage.getItem("sid"));
+      document.querySelector("#welcome-h1").innerText += ` ${sessionStorage.getItem("uname")}`;
+      let newArr = JSON.parse(data)
+      let member = newArr[0];
+      let instructor = newArr[1];
+      let mtable = document.querySelectorAll("tbody")[0];
+      for(let pr of member){
+        let tr = document.createElement("tr");
+        for(let key in pr){
+          const td = document.createElement("td");
+          td.innerText = pr[key];
+          tr.append(td);
+        }
+        let btntd = document.createElement("td");
+        let btn = document.createElement("button");
+        btn.innerText = "Delete";
+        btn.addEventListener("click",function(e){
+          mdeleteHandler(pr);
+          // console.log(pr);
+        })
+        btntd.append(btn);
+        tr.append(btntd);
+
+        mtable.append(tr);
+      }
+      let itable = document.querySelectorAll("tbody")[1];
+      for(let pr of instructor){
+        let tr = document.createElement("tr");
+        for(let key in pr){
+          const td = document.createElement("td");
+          td.innerText = pr[key];
+          tr.append(td);
+        }
+        let btntd = document.createElement("td");
+        let btn =document.createElement("button");
+        btn.innerText="Delete";
+        btntd.append(btn);
+        btn.addEventListener("click",function(e){
+          ideleteHandler(pr);
+        })
+        tr.append(btntd);
+        itable.append(tr);
+      }
+    
+    }else{
+      sessionStorage.removeItem("sid");
+      sessionStorage.removeItem("id");
+      sessionStorage.removeItem("uname");
+      location.replace("./login.html");
+    }
+  }
+
+  function load (){
+    let reqData = new FormData();
+    reqData.append("req", "read");
+    xmlReq.Post(reqData).then(
+      table,
+      (rej) => console.log(rej)
+    )
+  }
+  
+  load();
+</script>
+
+</html>

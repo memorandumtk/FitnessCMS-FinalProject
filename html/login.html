@@ -13,10 +13,10 @@
 
 <body>
     <div id="header-container" class="header-class container-fluid">
-      <img src="../orcalogo.png" height="100" style="margin-left: 50px">
+      <img src="../assets/orcalogo.png" height="100" style="margin-left: 50px">
       <h1 id="welcome-h1">Orca Fitness</h1>
       <div class="header-button-container">
-        <button type="button" class="btn btn-light" id="btnChgMember" data-status="member"></button>
+        <button type="button" class="btn btn-danger" id="btnChgMember" data-status="member"></button>
       </div>
     </div>
 
@@ -110,7 +110,7 @@
                 else {  // Admin
                   sessionStorage.setItem("sid", result.result.sid);
                   sessionStorage.setItem("aid", result.result.aid);
-                  console.log('admin')
+                  console.log('admin');
                   location.replace("../html/AdminDashboard.html");
                 }
             } catch (error) {

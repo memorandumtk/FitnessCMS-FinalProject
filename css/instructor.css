@@ -20,6 +20,10 @@ button {
     margin-top: 25px;
 }
 
+.subtitle-class {
+    margin-left: 200px;
+}
+
 .title-class{
     height: 100px;
     display: flex;

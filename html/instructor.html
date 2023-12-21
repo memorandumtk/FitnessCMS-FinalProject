@@ -10,7 +10,7 @@
 </head>
 <body>
     <div id="header-container" class="header-class container-fluid">
-        <img src="../orcalogo.png" height="100" style="margin-left: 50px">
+        <img src="../assets/orcalogo.png" height="100" style="margin-left: 50px">
         <h1 id="welcome-h1">Welcome Instructor</h1>
         <nav class="header-button-container">
             <button type="button" class="btn btn-light">My Requests</button>
@@ -57,6 +57,8 @@
     logoutBtn.addEventListener("click", ()=>{
         sessionStorage.removeItem("sid");
         sessionStorage.removeItem("fname");
+        sessionStorage.removeItem("mname");
+        sessionStorage.removeItem("memid");
         location.replace("./login.html");
     });
 

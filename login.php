@@ -31,7 +31,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
                     if($_POST["email"]==$row["email"]
                     && $_POST["password"]==$row["pass"]) {
                         session_start();
-                        $output = ["sid"=>session_id(),"fname"=>$row["fname"]];
+                        $output = ["sid"=>session_id(),"fname"=>$row["fname"], "mid"=>$row["mid"]];
                         echo json_encode(["result"=>$output]);
                         break;
                     }
