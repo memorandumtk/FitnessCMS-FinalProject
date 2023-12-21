@@ -67,7 +67,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
                         }
                     }
                 } else {
-                    echo "Member's id is not set.";
+                    echo "Menber's id is not set.";
                 }
                 break;
 

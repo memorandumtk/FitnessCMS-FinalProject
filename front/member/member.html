@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,7 +69,7 @@
 
     <main class="container-md p-4">
         <h3>
-            My Workout Program
+            <span></span> Workout Program
         </h3>
         <div class="message-from-instructor nonactive">
             <p>
@@ -186,7 +185,10 @@
         let messageBtnDiv = document.querySelector(".workout-form-message");
         let allWorkoutsBtn = document.querySelectorAll("#header-container button")[0];
         let myWorkoutsBtn = document.querySelectorAll("#header-container button")[1];
+        let logoutsBtn = document.querySelectorAll("#header-container button")[2];
         let messageFromInstructor = document.querySelector(".message-from-instructor");
+        let h3title = document.querySelector("main h3");
+        let isMessageFromInstructor = false;
 
         // Function making request form visible
         // and putting instructors' name to option input.
@@ -207,17 +209,18 @@
 
         // Function displaying "messages" from instructor.
         const messageFromInstructorPopper = () => {
+            if (messageFromInstructor.classList.contains("nonactive")
+                && isMessageFromInstructor) {
+                messageFromInstructor.classList.remove("nonactive")
+                messageFromInstructor.classList.add("active")
+            } else {
+                messageFromInstructor.classList.remove("active")
+                messageFromInstructor.classList.add("nonactive")
+            }
             let span = document.querySelector(".message-from-instructor p span");
             span.textContent = memberInfo.ifname;
             let notes = document.querySelectorAll(".message-from-instructor p")[1];
             notes.textContent = memberInfo.note;
-            if (messageFromInstructor.classList.contains("nonactive")) {
-                messageFromInstructor.classList.remove("nonactive")
-                messageFromInstructor.classList.add("active")
-            // } else {
-            //     messageFromInstructor.classList.remove("active")
-            //     messageFromInstructor.classList.add("nonactive")
-            }
         }
 
         // Function displaying "cards" of workouts.
@@ -236,7 +239,7 @@
                 card.classList.add("card", "h-100", "bg-light", "p-2", "row-gap-2", "justify-content-around");
                 let image = document.createElement("img");
                 image.classList.add("card-img-top", "rounded", "h-auto");
-                image.src = '../assets/image/' + workout.wname + '.jpg';
+                image.src = '../../assets/image/' + workout.wname + '.jpg';
                 image.alt = 'Image of ' + workout.wname;
 
                 let description = document.createElement("div");
@@ -251,7 +254,7 @@
                 target.textContent = workout.target;
                 let type = document.createElement("img");
                 type.classList.add("type-img");
-                type.src = '../assets/type/' + workout.type + '.svg';
+                type.src = '../../assets/type/' + workout.type + '.svg';
                 type.alt = 'Svg image of ' + workout.type;
                 smallDiv.append(title, target);
                 description.append(smallDiv, type);
@@ -296,7 +299,7 @@
             xmlReq.Post(reqData).then(
                 (data) => {
                     // This data should be array.
-                    myWorkoutData = JSON.parse(data);
+                    workoutCardPopper(JSON.parse(data));
                 },
                 (rej) => {
                     console.log(rej);
@@ -311,7 +314,7 @@
             xmlReq.Post(reqData).then(
                 (data) => {
                     // This data should be array.
-                    myWorkoutData = JSON.parse(data);
+                    allWorkoutData = JSON.parse(data);
                 },
                 (rej) => {
                     console.log(rej);
@@ -322,8 +325,9 @@
         // Function producing button taking user to seeing form 
         // or producing workout cards.
         const workoutHandler = () => {
-            // if (memberInfo.status===null) {
             // below condition is for test
+            // if (memberInfo.status===null) {
+            // if (memberInfo.status === null || memberInfo.status == "pending") {
             if (memberInfo.status === null || memberInfo.status == "pending") {
                 let message = document.createElement("h2");
                 message.textContent = "You don't have a workout program yet";
@@ -341,10 +345,10 @@
                     workoutRequestPopper(e);
                 })
             } else {
-                getMyWorkoutData();
-                workoutMessagePopper();
-                workoutCardPopper(myWorkoutData);
+                myWorkoutData = getMyWorkoutData();
+                isMessageFromInstructor = true;
                 messageFromInstructorPopper();
+                h3title.children[0].textContent = "My";
             }
         }
 
@@ -369,6 +373,10 @@
             removeCards();
             getAllWorkoutData();
             workoutCardPopper(allWorkoutData);
+            isMessageFromInstructor = false;
+            messageFromInstructorPopper();
+            h3title.children[0].textContent = "All";
+
         });
 
         // Add eventlistener to dispaly my workouts
@@ -378,8 +386,19 @@
             removeCards();
             getMyWorkoutData();
             workoutCardPopper(myWorkoutData);
+            isMessageFromInstructor = true;
             messageFromInstructorPopper();
+            h3title.children[0].textContent = "My";
         });
+
+
+        logoutsBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem("sid");
+            sessionStorage.removeItem("mid");
+            location.replace("../login.html")
+        })
+
 
         // Add event listener to make and send form request
         // and take user to initial page after submitting form.
@@ -408,6 +427,7 @@
         function load() {
             const sid = sessionStorage.getItem("sid");
             const mid = sessionStorage.getItem("mid");
+            if(mid===null)location.replace("../login.html");
             let reqData = new FormData();
             reqData.append("sid", sid);
             reqData.append("mid", mid);
