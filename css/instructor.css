@@ -5,7 +5,6 @@
     align-items: center;
 }
 
-
 #welcome-h1{
     color: white;
     margin-left: 50px;
@@ -17,7 +16,8 @@ button {
 }
 
 .title-class h1 {
-    margin-left: 100px;
+    margin-left: 200px;
+    margin-top: 25px;
 }
 
 .title-class{
@@ -26,6 +26,76 @@ button {
     align-items: center;
 }
 
+.subtitle-class {
+    margin-left: 200px;
+}
+
+.content-container {
+    margin-top: 25px;
+    margin-left: 200px;
+    margin-right: 200px;
+    border-radius: 20px;
+    padding: 50px;
+    height: auto;
+    width: auto;
+    background-color: lightgray;
+}
+
+.table-responsive-sm {
+    margin: auto;
+}
+
 table {
     margin: auto;
+}
+
+.btn-accept {
+    margin: 10px 0;
+    border-radius: 10px;
+    border-style: none;
+    padding: 10px 25px;
+    background-color: rgb(68, 193, 68);
+    color: white;
+}
+
+.btn-add {
+    /* margin: 10px 0; */
+    border-radius: 10px;
+    border-style: none;
+    padding: 10px 15px;
+    background-color: rgb(80, 80, 248);
+    color: white;
+}
+
+.btn-reject {
+    margin: 10px 10px 0 0;
+    border-radius: 10px;
+    border-style: none;
+    padding: 10px 25px;
+    background-color: rgb(219, 78, 78);
+    color: white;
+}
+
+.btn-end {
+    margin: auto;
+    border-radius: 10px;
+    border-style: none;
+    padding: 10px 25px;
+    background-color: rgb(219, 78, 78);
+    color: white;
+}
+
+.btn-finish {
+    border-radius: 10px;
+    border-style: none;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: rgb(138, 56, 244);
+    color: white;
+    width: 100px;
+}
+
+#tf-container {
+    display: flex;
+    justify-content: center;
 }
