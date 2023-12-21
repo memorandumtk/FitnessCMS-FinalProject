@@ -432,7 +432,12 @@
         function load() {
             const sid = sessionStorage.getItem("sid");
             const mid = sessionStorage.getItem("id");
-            if (mid === null) location.replace("../login.html");
+            if (mid === null || mid == "undefined"){
+                sessionStorage.removeItem("sid");
+                sessionStorage.removeItem("id");
+                sessionStorage.removeItem("uname");
+                location.replace("../login.html");
+            }
             let reqData = new FormData();
             reqData.append("sid", sid);
             reqData.append("mid", mid);

@@ -76,12 +76,19 @@
     };
 
     const loadData=(data)=>{
-        let irequests = (JSON.parse(data));
-        for(let req of irequests) {
-            reqObj = new request(req.reqid, req.memid, req.memfname, req.memlname, req.dlevel, req.dpw, req.instructor, req.goal, req.notes);
-            reqList.push(reqObj);
-        };
-        tablePoper();
+        if(sessionStorage.getItem("sid") != "undefined"){
+            let irequests = (JSON.parse(data));
+            for(let req of irequests) {
+                reqObj = new request(req.reqid, req.memid, req.memfname, req.memlname, req.dlevel, req.dpw, req.instructor, req.goal, req.notes);
+                reqList.push(reqObj);
+            };
+            tablePoper();
+        }else{
+            sessionStorage.removeItem("sid");
+            sessionStorage.removeItem("id");
+            sessionStorage.removeItem("uname");
+            location.replace("../login.html");
+        }
     };
 
     const load =()=>{
