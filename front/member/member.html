@@ -52,10 +52,10 @@
                 <!-- workout cards go here... -->
             </div>
 
-            <div class="workout-form-div">
+            <div class="workout-form-div nonactive">
                 <div class="workout-form-message d-flex flex-column gap-4">
                     <!-- If workout form hasn't been submitted, messages go here. -->
-                    <div class="pending-request-div table-responsive-md nonactive">
+                    <div class="pending-request-div table-responsive-md">
                         <h5>
                             Lists of Pending Requests
                         </h5>
@@ -254,13 +254,13 @@
 
         // Function displaying pending-request-div.
         const pendingRequestPopper = () => {
-            if (pendingRequestDiv.classList.contains("nonactive")
+            if (requestForm.classList.contains("nonactive")
                 && !isProgram) {
-                pendingRequestDiv.classList.remove("nonactive")
-                pendingRequestDiv.classList.add("active")
+                requestForm.classList.remove("nonactive")
+                requestForm.classList.add("active")
             } else {
-                pendingRequestDiv.classList.remove("active")
-                pendingRequestDiv.classList.add("nonactive")
+                requestForm.classList.remove("active")
+                requestForm.classList.add("nonactive")
             }
         }
 
@@ -278,7 +278,7 @@
                 e.preventDefault();
                 workoutRequestPopper(e);
             })
-                pendingRequestPopper();
+            pendingRequestPopper();
         }
 
         const displayPendingRequest = () => {
@@ -361,7 +361,7 @@
         const workoutHandler = () => {
             if (!isProgram) {
                 requestButtonPopper();
-                displayPendingRequest();
+                // displayPendingRequest();
                 pendingRequestPopper();
             } else {
                 getMyWorkoutData();
@@ -385,7 +385,13 @@
 
         // Add eventlistener to dispaly all workouts
         requestsBtn.addEventListener("click", (e) => {
-            location.reload();
+            removeCards();
+            // displayPendingRequest();
+            if (workoutFormDiv.classList.contains("nonactive")) {
+                requestButtonPopper();
+                workoutFormDiv.classList.remove("nonactive")
+                workoutFormDiv.classList.add("active")
+            }
         });
 
         // Add eventlistener to dispaly all workouts
@@ -439,7 +445,7 @@
         function load() {
             const sid = sessionStorage.getItem("sid");
             const mid = sessionStorage.getItem("id");
-            if (mid === null || mid == "undefined"){
+            if (mid === null || mid == "undefined") {
                 sessionStorage.removeItem("sid");
                 sessionStorage.removeItem("id");
                 sessionStorage.removeItem("uname");
