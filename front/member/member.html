@@ -212,14 +212,20 @@
 
                 let description = document.createElement("div");
                 description.classList.add("d-flex", "justify-content-evenly", "px-2", "align-items-center");
+                let titleNote = document.createElement("div");
+                titleNote.classList.add("d-flex", "flex-column");
                 let title = document.createElement("span");
                 title.classList.add("card-title");
                 title.textContent = workout.wname;
+                let notes = document.createElement("span");
+                notes.classList.add("card-text");
+                notes.textContent = workout.inote;
+                titleNote.append(title, notes)
                 let typeImg = document.createElement("img");
                 typeImg.classList.add("type-img");
                 typeImg.src = '../../assets/type/' + workout.type + '.svg';
                 typeImg.alt = 'Svg image of ' + workout.type;
-                description.append(title, typeImg);
+                description.append(titleNote, typeImg);
 
                 let setsReps = document.createElement("div");
                 setsReps.classList.add("d-flex", "justify-content-around", "align-items-center");
