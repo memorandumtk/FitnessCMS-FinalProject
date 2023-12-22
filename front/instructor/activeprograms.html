@@ -11,7 +11,7 @@
 <body>
     <div id="header-container" class="header-class container-fluid">
         <img src="../../assets/orcalogo.png" height="100" style="margin-left: 50px">
-        <h1 id="welcome-h1">Welcome Instructor</h1>
+        <h1 id="welcome-h1">Welcome <span id="instructor-name"></span></h1>
         <nav class="header-button-container">
             <button type="button" class="btn btn-light">My Requests</button>
             <button type="button" class="btn btn-light">Active Programs</button>
@@ -50,6 +50,8 @@
     let pList = [];
     let pObj = null;
     let fname = sessionStorage.getItem("fname");
+
+    document.getElementById("instructor-name").innerText = fname;
 
     let logoutBtn = document.querySelectorAll("button")[2];
     logoutBtn.addEventListener("click", ()=>{
