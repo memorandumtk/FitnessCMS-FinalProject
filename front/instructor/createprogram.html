@@ -11,7 +11,7 @@
 <body>
     <div id="header-container" class="header-class container-fluid">
         <img src="../../assets/orcalogo.png" height="100" style="margin-left: 50px">
-        <h1 id="welcome-h1">Welcome Instructor</h1>
+        <h1 id="welcome-h1">Welcome <span id="instructor-name"></span></h1>
         <nav class="header-button-container">
             <button type="button" class="btn btn-danger">Logout</button>
         </nav>
@@ -53,6 +53,9 @@
     import workout from "../js/workoutClass.js";
     let mname = sessionStorage.getItem("mname");
     let memid = sessionStorage.getItem("memid");
+
+    let ifname = sessionStorage.getItem("fname");
+    document.getElementById("instructor-name").innerText = ifname;
 
     document.getElementById("member-name-header").innerText=mname;
 
