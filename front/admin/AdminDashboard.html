@@ -66,13 +66,13 @@
 </body>
 <script type="module">
   import XMLReq from "../js/XMLReq.js";
-  let xmlReq = new XMLReq("http://localhost/FitnessCMS-FinalProject/member.php");
+  let xmlReq = new XMLReq("http://localhost/FitnessCMS-FinalProject/admin.php");
 
   let btn = document.querySelectorAll("button")[0];
   btn.addEventListener("click",()=>{
     sessionStorage.removeItem("sid");
     sessionStorage.removeItem("id");
-    sessionStorage.removeItem("uname");
+    sessionStorage.removeItem("fname");
     location.replace("../login.html");
   });
 
@@ -151,7 +151,7 @@
     }else{
       sessionStorage.removeItem("sid");
       sessionStorage.removeItem("id");
-      sessionStorage.removeItem("uname");
+      sessionStorage.removeItem("fname");
       location.replace("../login.html");
     }
   }
