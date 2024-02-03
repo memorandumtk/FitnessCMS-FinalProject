@@ -1,5 +1,7 @@
 # FitnessCMS-FinalProject
 This is final project 'CMS system for Fitness' of team D on Dec 2023.
+# How to use
+Please start by logging in to the admin page and then proceed to register your information. The admin email is admin@mail.com, and the password is admin.
 
 ### Proposal
 https://docs.google.com/presentation/d/11z6IoOHW_gh82JMGW4Q2M1nRdGiTjSHTd3a9JYvKKGY/edit#slide=id.g2a257cda83e_0_2
